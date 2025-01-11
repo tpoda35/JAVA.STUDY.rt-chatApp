@@ -1,4 +1,4 @@
-package com.rt_chatApp.rt_chatApp.controller;
+package com.rt_chatApp.controller;
 
 import org.springframework.stereotype.Controller;
 
