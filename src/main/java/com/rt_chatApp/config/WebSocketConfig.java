@@ -1,4 +1,4 @@
-package com.rt_chatApp.rt_chatApp.config;
+package com.rt_chatApp.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
