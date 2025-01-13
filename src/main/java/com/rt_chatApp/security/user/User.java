@@ -28,10 +28,13 @@ public class User implements UserDetails {
   @Id
   @GeneratedValue
   private Integer id;
+  private String username;
   private String firstname;
   private String lastname;
   private String email;
   private String password;
+
+  private Status status;
 
   @Enumerated(EnumType.STRING)
   private Role role;
