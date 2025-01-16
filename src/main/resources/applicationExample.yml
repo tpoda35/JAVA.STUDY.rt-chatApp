@@ -16,6 +16,16 @@ spring:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: yourid
+            client-secret: yoursecret
+            scope:
+              - email
+              - profile
 
 application:
   security:
@@ -24,3 +34,4 @@ application:
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
+
