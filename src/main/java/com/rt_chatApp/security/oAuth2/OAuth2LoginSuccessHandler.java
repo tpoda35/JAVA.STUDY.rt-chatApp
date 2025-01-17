@@ -5,7 +5,6 @@ import com.rt_chatApp.security.auth.AuthenticationResponse;
 import com.rt_chatApp.security.config.JwtService;
 import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserRepository;
-import com.sun.security.auth.UserPrincipal;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
