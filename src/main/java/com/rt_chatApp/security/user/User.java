@@ -1,5 +1,6 @@
 package com.rt_chatApp.security.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rt_chatApp.security.token.Token;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,7 +40,11 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role;
 
+  @Enumerated(EnumType.STRING)
+  private AuthProvider authProvider;
+
   @OneToMany(mappedBy = "user")
+  @JsonIgnore
   private List<Token> tokens;
 
   @Override
