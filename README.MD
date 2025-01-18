@@ -43,6 +43,6 @@ Before you begin, ensure you have the following installed on your system:
 
 # Note
 - **Security System**: Please note that the security 
-system (JWT and OAuth2 authentication) is not of my own design. 
+system (JWT authentication) is not of my own design. 
 It leverages existing open-source security solutions and best 
 practices.
