@@ -74,18 +74,19 @@ public class SecurityConfiguration {
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
+                .oauth2Login(oAuth2 ->
+                        oAuth2
+                                .userInfoEndpoint(userInfoEndpointConfig ->
+                                        userInfoEndpointConfig.userService(customOAuth2UserService)
+                                )
+                                .successHandler(oAuth2LoginSuccessHandler)
+//                                .defaultSuccessUrl("/", false)
+                )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout ->
                         logout.logoutUrl("/api/v1/auth/logout")
                                 .addLogoutHandler(logoutHandler)
                                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-                )
-                .oauth2Login(oAuth2 ->
-                        oAuth2
-                                .userInfoEndpoint(userInfoEndpointConfig ->
-                                        userInfoEndpointConfig.userService(customOAuth2UserService)
-                                        )
-                                .successHandler(oAuth2LoginSuccessHandler)
                 );
 
         return http.build();
