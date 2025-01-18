@@ -1,6 +1,7 @@
 package com.rt_chatApp.security.oAuth2;
 
 import com.rt_chatApp.security.user.AuthProvider;
+import com.rt_chatApp.security.user.Role;
 import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     newUser.setEmail(email);
                     newUser.setUsername(name);
                     newUser.setAuthProvider(AuthProvider.GOOGLE);
+                    newUser.setRole(Role.USER);
                     return repository.save(newUser);
                 });
 
