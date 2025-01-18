@@ -3,6 +3,9 @@ package com.rt_chatApp.security.oAuth2;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rt_chatApp.security.auth.AuthenticationResponse;
 import com.rt_chatApp.security.config.JwtService;
+import com.rt_chatApp.security.token.Token;
+import com.rt_chatApp.security.token.TokenRepository;
+import com.rt_chatApp.security.token.TokenType;
 import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,6 +27,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final JwtService jwtService;
     private final UserRepository repository;
     private final ObjectMapper objectMapper;
+    private final TokenRepository tokenRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -37,6 +41,15 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         String jwt = jwtService.generateToken(user);
         String refresh = jwtService.generateRefreshToken(user);
+
+        var token = Token.builder()
+                .user(user)
+                .token(jwt)
+                .tokenType(TokenType.BEARER)
+                .expired(false)
+                .revoked(false)
+                .build();
+        tokenRepository.save(token);
 
         AuthenticationResponse authResponse = AuthenticationResponse.builder()
                 .accessToken(jwt)
