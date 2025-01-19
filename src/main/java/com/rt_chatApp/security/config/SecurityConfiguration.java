@@ -48,8 +48,11 @@ public class SecurityConfiguration {
             "/swagger-ui/**",
             "/webjars/**",
             "/swagger-ui.html",
-            "/index.html",
-            "/oauth2/**"
+            "/*",
+            "/oauth2/**",
+            "/css/**",
+            "/js/**",
+            "/images/**"
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
