@@ -27,4 +27,12 @@ public class ChatService {
         return repository.findAllByStatus(Status.ONLINE);
     }
 
+    public void connect(User user) {
+        var storedUser = repository.findById(user.getId())
+                .orElse(null);
+        if (storedUser != null){
+            storedUser.setStatus(Status.ONLINE);
+            repository.save(storedUser);
+        }
+    }
 }

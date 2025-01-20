@@ -18,6 +18,15 @@ public class UserConnectionsController {
 
     private final ChatService service;
 
+    @MessageMapping("/user.connectUser")
+    @SendTo("/user/topic")
+    public User connect(
+            @Payload User user
+    ) {
+        service.connect(user);
+        return user;
+    }
+
     @MessageMapping("/user.disconnectUser")
     @SendTo("/user/topic")
     public User disconnect(
