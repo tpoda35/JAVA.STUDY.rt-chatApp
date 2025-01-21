@@ -1,5 +1,6 @@
 package com.rt_chatApp.security.auth;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +25,20 @@ public class AuthenticationController {
   ) {
     return ResponseEntity.ok(service.register(request));
   }
+
   @PostMapping("/authenticate")
-  public ResponseEntity<AuthenticationResponse> authenticate(
-      @RequestBody AuthenticationRequest request
+  public ResponseEntity<?> authenticate(
+      @RequestBody AuthenticationRequest request,
+      HttpServletResponse response
   ) {
-    return ResponseEntity.ok(service.authenticate(request));
+    AuthenticationResponse authenticationResponse = service.authenticate(request);
+    Cookie cookie = new Cookie("Authorization", "Bearer " + authenticationResponse.getAccessToken());
+    cookie.setHttpOnly(true);
+    cookie.setPath("/");
+    cookie.setMaxAge(7 * 24 * 60 * 60);
+    response.addCookie(cookie);
+
+    return ResponseEntity.ok("Authenticated");
   }
 
   @PostMapping("/refresh-token")
