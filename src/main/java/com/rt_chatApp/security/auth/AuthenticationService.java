@@ -91,13 +91,19 @@ public class AuthenticationService {
           HttpServletRequest request,
           HttpServletResponse response
   ) throws IOException {
-    final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+    final String authHeader = request.getHeader("RefreshToken");
     final String refreshToken;
     final String userEmail;
-    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+    if (authHeader == null) {
       return;
     }
-    refreshToken = authHeader.substring(7);
+
+    if (authHeader.startsWith("Bearer ")){
+      refreshToken = authHeader.substring(7);
+    } else {
+      refreshToken = authHeader;
+    }
+
     userEmail = jwtService.extractUsername(refreshToken);
     if (userEmail != null) {
       var user = this.repository.findByEmail(userEmail)
@@ -110,6 +116,7 @@ public class AuthenticationService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+        // This will be replaced with cookie.
         new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
       }
     }
