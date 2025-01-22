@@ -30,8 +30,14 @@ spring:
 application:
   security:
     jwt:
-      secret-key: api-key
-      expiration: 86400000 # a day
+      secret-key: your-key
+      expiration: 1800000 # 30 minutes
       refresh-token:
-        expiration: 604800000 # 7 days
+        expiration: 2592000000 # 30 days
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
 
