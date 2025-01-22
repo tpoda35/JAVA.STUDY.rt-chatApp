@@ -32,11 +32,19 @@ public class AuthenticationController {
       HttpServletResponse response
   ) {
     AuthenticationResponse authenticationResponse = service.authenticate(request);
-    Cookie cookie = new Cookie("Authorization", "Bearer " + authenticationResponse.getAccessToken());
-    cookie.setHttpOnly(true);
-    cookie.setPath("/");
-    cookie.setMaxAge(7 * 24 * 60 * 60);
-    response.addCookie(cookie);
+
+    // Access Token
+    Cookie accessToken = new Cookie("Authorization", authenticationResponse.getAccessToken());
+    accessToken.setHttpOnly(true);
+    accessToken.setPath("/");
+    accessToken.setMaxAge(30 * 60); // 30 min
+    response.addCookie(accessToken);
+
+    Cookie refreshToken = new Cookie("RefreshToken", authenticationResponse.getRefreshToken());
+    refreshToken.setHttpOnly(true);
+    refreshToken.setPath("/");
+    refreshToken.setMaxAge(30 * 24 * 60 * 60); // 30 day
+    response.addCookie(refreshToken);
 
     return ResponseEntity.ok("Authenticated");
   }
