@@ -8,15 +8,16 @@ import com.rt_chatApp.security.token.TokenType;
 import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 
 @Service
@@ -28,6 +29,7 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
+  @Transactional
   public AuthenticationResponse register(RegisterRequest request) {
     var user = User.builder()
         .firstname(request.getFirstname())
@@ -46,6 +48,7 @@ public class AuthenticationService {
         .build();
   }
 
+  @Transactional
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
@@ -65,6 +68,7 @@ public class AuthenticationService {
         .build();
   }
 
+  @Transactional
   private void saveUserToken(User user, String jwtToken) {
     var token = Token.builder()
         .user(user)
@@ -76,6 +80,8 @@ public class AuthenticationService {
     tokenRepository.save(token);
   }
 
+  // Modifies the token expiration to true.
+  @Transactional
   private void revokeAllUserTokens(User user) {
     var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
     if (validUserTokens.isEmpty())
@@ -87,21 +93,16 @@ public class AuthenticationService {
     tokenRepository.saveAll(validUserTokens);
   }
 
+  // Better exception handling will be added.
+  // Gives back a new httponly cookie with a new jwt token, if the refresh token is valid.
+  @Transactional
   public void refreshToken(
-          HttpServletRequest request,
+          String refreshToken,
           HttpServletResponse response
   ) throws IOException {
-    final String authHeader = request.getHeader("RefreshToken");
-    final String refreshToken;
     final String userEmail;
-    if (authHeader == null) {
-      return;
-    }
-
-    if (authHeader.startsWith("Bearer ")){
-      refreshToken = authHeader.substring(7);
-    } else {
-      refreshToken = authHeader;
+    if (refreshToken == null) {
+      throw new AuthenticationException("Invalid refresh token. Re-login.");
     }
 
     userEmail = jwtService.extractUsername(refreshToken);
@@ -112,12 +113,14 @@ public class AuthenticationService {
         var accessToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
-        var authResponse = AuthenticationResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
-        // This will be replaced with cookie.
-        new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+
+        Cookie accessTokenCookie = new Cookie("Authorization", accessToken);
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(30 * 60); // 30 min
+        response.addCookie(accessTokenCookie);
+
+        new ObjectMapper().writeValue(response.getOutputStream(), "Successfully authenticated.");
       }
     }
   }
