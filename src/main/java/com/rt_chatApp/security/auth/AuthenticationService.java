@@ -95,6 +95,7 @@ public class AuthenticationService {
 
   // Better exception handling will be added.
   // Gives back a new httponly cookie with a new jwt token, if the refresh token is valid.
+  // Else logs out the user.
   @Transactional
   public void refreshToken(
           String refreshToken,
@@ -102,7 +103,7 @@ public class AuthenticationService {
   ) throws IOException {
     final String userEmail;
     if (refreshToken == null) {
-      throw new AuthenticationException("Invalid refresh token. Re-login.");
+      throw new AuthenticationException("Missing refresh token. Login again.");
     }
 
     userEmail = jwtService.extractUsername(refreshToken);
