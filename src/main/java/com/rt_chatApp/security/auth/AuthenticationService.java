@@ -29,6 +29,11 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
+  // Registers the user.
+  // Process:
+  // User gives the data with the RegisterRequest object, with that data a new user object is created with the lombok builder.
+  // The user object saved in the DB, also generates JWT and refreshToken with the user object.
+  // Only the JWT token getting saved to the DB, which later will be authenticated with every request.
   @Transactional
   public AuthenticationResponse register(RegisterRequest request) {
     var user = User.builder()
@@ -43,11 +48,18 @@ public class AuthenticationService {
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
     return AuthenticationResponse.builder()
-        .accessToken(jwtToken)
+            .accessToken(jwtToken)
             .refreshToken(refreshToken)
-        .build();
+            .build();
   }
 
+  // Authenticates/Logins a user.
+  // Process:
+  // User gives in the data with the AuthenticationRequest object, which is passed to the authenticationManager.
+  // That authenticates the user.
+  // With the user object the code creates a new JWT and refreshToken.
+  // Only the JWT token getting saved to the DB, which later will be authenticated with every request.
+  // Gives back response in the form of AuthenticationResponse.
   @Transactional
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(
@@ -57,17 +69,22 @@ public class AuthenticationService {
         )
     );
     var user = repository.findByEmail(request.getEmail())
-        .orElseThrow(() -> new EntityNotFoundException("User not found."));
+            .orElseThrow(() -> new EntityNotFoundException("User not found."));
     var jwtToken = jwtService.generateToken(user);
+    // Will be modified to stay the same for 30 days.
     var refreshToken = jwtService.generateRefreshToken(user);
     revokeAllUserTokens(user);
     saveUserToken(user, jwtToken);
     return AuthenticationResponse.builder()
-        .accessToken(jwtToken)
+            .accessToken(jwtToken)
             .refreshToken(refreshToken)
-        .build();
+            .build();
   }
 
+  // Saves the JWT token to the DB.
+  // Process:
+  // The method need a user object and a JWT token.
+  // A new Token object is created with that data and saved to the database.
   @Transactional
   private void saveUserToken(User user, String jwtToken) {
     var token = Token.builder()
@@ -80,7 +97,10 @@ public class AuthenticationService {
     tokenRepository.save(token);
   }
 
-  // Modifies the token expiration to true.
+  // Revokes all the valid tokens related to the given user.
+  // Process:
+  // The method need a user object.
+  // The code gets all the valid user token, where the Expiration && Revoked is not true and modifies them to true.
   @Transactional
   private void revokeAllUserTokens(User user) {
     var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
@@ -97,9 +117,8 @@ public class AuthenticationService {
   // Gives back a new httponly cookie with a new jwt token, if the refresh token is valid.
   // Else logs out the user.
   @Transactional
-  public void refreshToken(
-          String refreshToken,
-          HttpServletResponse response
+  public String refreshToken(
+          String refreshToken
   ) throws IOException {
     final String userEmail;
     if (refreshToken == null) {
@@ -115,15 +134,10 @@ public class AuthenticationService {
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
 
-        Cookie accessTokenCookie = new Cookie("Authorization", accessToken);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(30 * 60); // 30 min
-        response.addCookie(accessTokenCookie);
-
-        new ObjectMapper().writeValue(response.getOutputStream(), "Successfully authenticated.");
+        return accessToken;
       }
     }
+    return null;
   }
 
   public boolean userExists(String email){
