@@ -3,6 +3,7 @@ package com.rt_chatApp.controller;
 import com.rt_chatApp.Dto.CustomExceptionDto;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,20 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionController {
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<CustomExceptionDto> handleEntityNotFoundException(
+            EntityNotFoundException e, HttpServletRequest request
+    ) {
+        var response = CustomExceptionDto.builder()
+                .date(new Date())
+                .statusCode(400)
+                .message(e.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex){
