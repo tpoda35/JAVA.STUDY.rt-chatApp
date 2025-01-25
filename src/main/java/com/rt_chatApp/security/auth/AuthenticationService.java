@@ -1,6 +1,5 @@
 package com.rt_chatApp.security.auth;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rt_chatApp.security.config.JwtService;
 import com.rt_chatApp.security.token.Token;
 import com.rt_chatApp.security.token.TokenRepository;
@@ -8,8 +7,6 @@ import com.rt_chatApp.security.token.TokenType;
 import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -3,6 +3,7 @@ package com.rt_chatApp.security.config;
 import com.rt_chatApp.security.token.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -45,25 +46,36 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       @NonNull FilterChain filterChain
   ) throws ServletException, IOException {
     try {
+      // If the path is /api/v1/auth, then we don't need to check the JWT.
+      // That is because we don't need to authorize or authenticate that url
       if (request.getServletPath().contains("/api/v1/auth")) {
         filterChain.doFilter(request, response);
         return;
       }
-      final String authHeader = request.getHeader("Authorization");
-      final String jwt;
+
+      String jwt = null;
       final String userEmail;
-      if (authHeader == null) {
+
+      // Save the cookies in an Array, and we loop through them to find the Authorization cookie.
+      // Then we save that to the jwt variable.
+      Cookie[] cookies = request.getCookies();
+      if (cookies != null){
+        for (Cookie cookie : cookies){
+          if ("Authorization".equals(cookie.getName())){
+            jwt = cookie.getValue();
+            break;
+          }
+        }
+      }
+
+      if (jwt == null) {
         filterChain.doFilter(request, response);
         return;
       }
 
-      if (authHeader.startsWith("Bearer ")){
-        jwt = authHeader.substring(7);
-      } else {
-        jwt = authHeader;
-      }
-
+      // Extract the username (which is the email) from the JWT.
       userEmail = jwtService.extractUsername(jwt);
+      // Checks if the email or the authentication is not null.
       if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
         var isTokenValid = tokenRepository.findByToken(jwt)
