@@ -17,12 +17,31 @@ public class AuthenticationController {
   private final AuthenticationService service;
 
   // Registers a user.
-  // Will be modified to give back Cookies.
+  // Will be modified in the future (mostly the Refresh Token system).
+  // Process:
+  // server.register(request) registers the user.
+  // If everything is good, then it gives back a jwt + refresh token.
+  // These two gets saved in HttpOnly Cookies.
   @PostMapping("/register")
-  public ResponseEntity<AuthenticationResponse> register(
-      @RequestBody RegisterRequest request
+  public ResponseEntity<String> register(
+      @RequestBody RegisterRequest request,
+      HttpServletResponse response
   ) {
-    return ResponseEntity.ok(service.register(request));
+    AuthenticationResponse authResponse = service.register(request);
+
+    Cookie accessToken = new Cookie("Authorization", authResponse.getAccessToken());
+    accessToken.setHttpOnly(true);
+    accessToken.setPath("/");
+    accessToken.setMaxAge(30 * 60); // 30 min
+    response.addCookie(accessToken);
+
+    Cookie refreshToken = new Cookie("RefreshToken", authResponse.getRefreshToken());
+    refreshToken.setHttpOnly(true);
+    refreshToken.setPath("/");
+    refreshToken.setMaxAge(30 * 24 * 60 * 60); // 30 day
+    response.addCookie(refreshToken);
+
+    return ResponseEntity.ok("Registered and authenticated.");
   }
 
   // Authenticates the user.
