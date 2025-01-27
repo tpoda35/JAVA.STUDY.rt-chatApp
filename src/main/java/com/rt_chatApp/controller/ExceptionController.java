@@ -7,6 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,7 +19,6 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionController {
-
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<CustomExceptionDto> handleEntityNotFoundException(
             EntityNotFoundException e, HttpServletRequest request
@@ -72,6 +72,14 @@ public class ExceptionController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Map<String, String>> handleBadCredentialsException(BadCredentialsException ex){
+        Map<String, String> errors = new HashMap<>();
+        errors.put("error", "Invalid username or password");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
     @ExceptionHandler(Exception.class)
