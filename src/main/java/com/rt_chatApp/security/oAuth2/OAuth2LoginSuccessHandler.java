@@ -10,6 +10,7 @@ import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,18 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String jwt = jwtService.generateToken(user);
         String refresh = jwtService.generateRefreshToken(user);
 
+        Cookie accessToken = new Cookie("Authorization", jwt);
+        accessToken.setHttpOnly(true);
+        accessToken.setPath("/");
+        accessToken.setMaxAge(30 * 60);
+        response.addCookie(accessToken);
+
+        Cookie refreshToken = new Cookie("RefreshToken", refresh);
+        refreshToken.setHttpOnly(true);
+        refreshToken.setPath("/");
+        refreshToken.setMaxAge(30 * 24 * 60 * 60);
+        response.addCookie(refreshToken);
+
         var token = Token.builder()
                 .user(user)
                 .token(jwt)
@@ -50,13 +63,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 .revoked(false)
                 .build();
         tokenRepository.save(token);
-
-        AuthenticationResponse authResponse = AuthenticationResponse.builder()
-                .accessToken(jwt)
-                .refreshToken(refresh)
-                .build();
-
         response.setContentType("application/json");
-        response.getWriter().write(objectMapper.writeValueAsString(authResponse));
     }
 }
