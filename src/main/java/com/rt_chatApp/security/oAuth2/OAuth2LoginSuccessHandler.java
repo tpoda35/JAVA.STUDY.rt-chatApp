@@ -1,7 +1,6 @@
 package com.rt_chatApp.security.oAuth2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rt_chatApp.security.auth.AuthenticationResponse;
 import com.rt_chatApp.security.config.JwtService;
 import com.rt_chatApp.security.token.Token;
 import com.rt_chatApp.security.token.TokenRepository;
@@ -63,6 +62,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 .revoked(false)
                 .build();
         tokenRepository.save(token);
-        response.setContentType("application/json");
+        response.sendRedirect("/index.html");
     }
 }
