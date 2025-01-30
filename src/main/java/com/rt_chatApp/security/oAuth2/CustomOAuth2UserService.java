@@ -23,13 +23,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         String email = oAuth2User.getAttribute("email");
-        String name = oAuth2User.getAttribute("name");
 
         repository.findByEmail(email)
                 .orElseGet(() -> {
                     User newUser = new User();
                     newUser.setEmail(email);
-                    newUser.setUsername(name);
                     newUser.setAuthProvider(AuthProvider.GOOGLE);
                     newUser.setRole(Role.USER);
                     return repository.save(newUser);
