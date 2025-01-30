@@ -78,7 +78,6 @@ public class SecurityConfiguration {
                                         userInfoEndpointConfig.userService(customOAuth2UserService)
                                 )
                                 .successHandler(oAuth2LoginSuccessHandler)
-                                .defaultSuccessUrl("/index.html", false)
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout ->
