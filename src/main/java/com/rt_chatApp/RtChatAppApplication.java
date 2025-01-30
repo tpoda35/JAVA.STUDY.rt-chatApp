@@ -1,9 +1,16 @@
 package com.rt_chatApp;
 
+import com.rt_chatApp.security.auth.AuthenticationService;
+import com.rt_chatApp.security.auth.RegisterRequest;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import static com.rt_chatApp.security.user.Role.ADMIN;
+import static com.rt_chatApp.security.user.Role.MANAGER;
 
 @SpringBootApplication
 @EnableAsync
@@ -16,8 +23,7 @@ public class RtChatAppApplication {
 
 //	@Bean
 //	public CommandLineRunner commandLineRunner(
-//			AuthenticationService service,
-//			UsernameGenRepository repository
+//			AuthenticationService service
 //	) {
 //		if (!service.userExists("admin@mail.com") && !service.userExists("manager@mail.com")) {
 //			return args -> {
