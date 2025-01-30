@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(UserEntityListener.class)
 @Entity
 @Table(name = "_user")
 public class User implements UserDetails {
@@ -23,7 +22,6 @@ public class User implements UserDetails {
   @Id
   @GeneratedValue
   private Integer id;
-  private String username;
   private String firstname;
   private String lastname;
   private String email;
@@ -53,7 +51,7 @@ public class User implements UserDetails {
 
   @Override
   public String getUsername() {
-    return username;
+    return email;
   }
 
   @Override
