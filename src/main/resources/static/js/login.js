@@ -47,12 +47,3 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         console.error('Login error:', error);
     }
 });
-
-// Remove invalid class when typing
-document.getElementById('email').addEventListener('input', function() {
-    this.classList.remove('is-invalid');
-    });
-
-document.getElementById('password').addEventListener('input', function() {
-    this.classList.remove('is-invalid');
-});
