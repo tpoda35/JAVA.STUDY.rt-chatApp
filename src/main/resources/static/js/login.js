@@ -47,3 +47,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         console.error('Login error:', error);
     }
 });
+
+function redirectToGoogle() {
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+}
