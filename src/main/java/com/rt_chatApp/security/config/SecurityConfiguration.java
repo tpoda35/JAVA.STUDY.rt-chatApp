@@ -48,7 +48,8 @@ public class SecurityConfiguration {
             "/css/**",
             "/js/**",
             "/images/**",
-            "/login.html"
+            "/login.html",
+            "/register.html"
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
