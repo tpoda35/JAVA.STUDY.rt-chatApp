@@ -2,6 +2,7 @@ package com.rt_chatApp.security.auth;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class AuthenticationController {
   // These two gets saved in HttpOnly Cookies.
   @PostMapping("/register")
   public ResponseEntity<String> register(
-      @RequestBody RegisterRequest request,
+      @RequestBody @Valid RegisterRequest request,
       HttpServletResponse response
   ) {
     AuthenticationResponse authResponse = service.register(request);
