@@ -4,6 +4,7 @@ import com.rt_chatApp.security.config.JwtService;
 import com.rt_chatApp.security.token.Token;
 import com.rt_chatApp.security.token.TokenRepository;
 import com.rt_chatApp.security.token.TokenType;
+import com.rt_chatApp.security.user.Role;
 import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -38,7 +39,7 @@ public class AuthenticationService {
         .lastname(request.getLastname())
         .email(request.getEmail())
         .password(passwordEncoder.encode(request.getPassword()))
-        .role(request.getRole())
+        .role(Role.USER)
         .build();
     var savedUser = repository.save(user);
     var jwtToken = jwtService.generateToken(user);
