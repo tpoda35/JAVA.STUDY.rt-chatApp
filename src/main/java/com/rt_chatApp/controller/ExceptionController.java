@@ -75,9 +75,11 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Map<String, String>> handleBadCredentialsException(BadCredentialsException ex){
+    public ResponseEntity<Map<String, String>> handleBadCredentialsException(
+            BadCredentialsException ex
+    ){
         Map<String, String> errors = new HashMap<>();
-        errors.put("error", "Invalid username or password");
+        errors.put("error", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
