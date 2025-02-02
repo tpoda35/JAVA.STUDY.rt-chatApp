@@ -4,6 +4,7 @@ import com.rt_chatApp.security.config.JwtService;
 import com.rt_chatApp.security.token.Token;
 import com.rt_chatApp.security.token.TokenRepository;
 import com.rt_chatApp.security.token.TokenType;
+import com.rt_chatApp.security.user.AuthProvider;
 import com.rt_chatApp.security.user.Role;
 import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserRepository;
@@ -11,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,22 +35,20 @@ public class AuthenticationService {
   // The user object saved in the DB, also generates JWT and refreshToken with the user object.
   // Only the JWT token getting saved to the DB, which later will be authenticated with every request.
   @Transactional
-  public AuthenticationResponse register(RegisterRequest request) {
+  public void register(RegisterRequest request) {
+    if (repository.existsByEmail(request.getEmail())){
+      throw new BadCredentialsException("Email already in use.");
+    }
+
     var user = User.builder()
         .firstname(request.getFirstname())
         .lastname(request.getLastname())
         .email(request.getEmail())
         .password(passwordEncoder.encode(request.getPassword()))
         .role(Role.USER)
+        .authProvider(AuthProvider.LOCAL)
         .build();
     var savedUser = repository.save(user);
-    var jwtToken = jwtService.generateToken(user);
-    var refreshToken = jwtService.generateRefreshToken(user);
-    saveUserToken(savedUser, jwtToken);
-    return AuthenticationResponse.builder()
-            .accessToken(jwtToken)
-            .refreshToken(refreshToken)
-            .build();
   }
 
   // Authenticates/Logins a user.
