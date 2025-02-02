@@ -28,20 +28,7 @@ public class AuthenticationController {
       @RequestBody @Valid RegisterRequest request,
       HttpServletResponse response
   ) {
-    AuthenticationResponse authResponse = service.register(request);
-
-    Cookie accessToken = new Cookie("Authorization", authResponse.getAccessToken());
-    accessToken.setHttpOnly(true);
-    accessToken.setPath("/");
-    accessToken.setMaxAge(30 * 60); // 30 min
-    response.addCookie(accessToken);
-
-    Cookie refreshToken = new Cookie("RefreshToken", authResponse.getRefreshToken());
-    refreshToken.setHttpOnly(true);
-    refreshToken.setPath("/");
-    refreshToken.setMaxAge(30 * 24 * 60 * 60); // 30 day
-    response.addCookie(refreshToken);
-
+    service.register(request);
     return ResponseEntity.ok("Registered and authenticated.");
   }
 
@@ -52,7 +39,7 @@ public class AuthenticationController {
   // We add them to two different HttpOnly Cookies and save them to the response.
   @PostMapping("/authenticate")
   public ResponseEntity<String> authenticate(
-      @RequestBody AuthenticationRequest request,
+      @RequestBody @Valid AuthenticationRequest request,
       HttpServletResponse response
   ) {
     AuthenticationResponse authResponse = service.authenticate(request);
