@@ -6,6 +6,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     // Get input values
     const email = document.getElementById('email');
     const password = document.getElementById('password');
+    const invalid = document.getElementById('invalid-cred');
 
     // Basic validation
     if (email.value.trim() === '') {
@@ -22,8 +23,6 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         password.classList.remove('is-invalid');
     }
 
-    console.log(email.value, password.value)
-
     try {
         const response = await fetch('http://localhost:8080/api/v1/auth/authenticate', {
             method: 'POST',
@@ -37,13 +36,18 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         });
 
         if (!response.ok) {
-             throw new Error('Login failed');
+            if (response.status == 400){
+                console.log('Invalid credentials.')
+                invalid.style.display = 'block';
+            }
+            throw new Error('Login failed');
         }
 
         window.location.href = 'index.html'
         const data = await response.json();
-        console.log('Login successful', data);
+        console.log('Login successful');
     } catch (error) {
+
         console.error('Login error:', error);
     }
 });
