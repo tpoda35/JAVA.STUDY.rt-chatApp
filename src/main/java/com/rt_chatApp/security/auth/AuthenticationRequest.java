@@ -1,5 +1,7 @@
 package com.rt_chatApp.security.auth;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthenticationRequest {
 
-  //This is for the login requests mainly.
+  @NotBlank(message = "Email field cannot be blank.")
+  @Email(message = "Invalid email address format.")
   private String email;
+
+  @NotBlank(message = "Password field cannot be blank.")
   private String password;
 }
