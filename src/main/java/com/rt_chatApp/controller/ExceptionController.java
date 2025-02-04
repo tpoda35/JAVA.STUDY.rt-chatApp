@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,13 +20,27 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionController {
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<?> handleAuthorizationDeniedException(
+            AuthorizationDeniedException e, HttpServletRequest request
+    ) {
+        var response = CustomExceptionDto.builder()
+                .date(new Date())
+                .statusCode(HttpStatus.FORBIDDEN.value())
+                .message(e.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<CustomExceptionDto> handleEntityNotFoundException(
             EntityNotFoundException e, HttpServletRequest request
     ) {
         var response = CustomExceptionDto.builder()
                 .date(new Date())
-                .statusCode(400)
+                .statusCode(HttpStatus.BAD_REQUEST.value())
                 .message(e.getMessage())
                 .path(request.getRequestURI())
                 .build();
@@ -52,7 +67,7 @@ public class ExceptionController {
     ){
         var response = CustomExceptionDto.builder()
                 .date(new Date())
-                .statusCode(401)
+                .statusCode(HttpStatus.UNAUTHORIZED.value())
                 .message("Session expired.")
                 .path(request.getRequestURI())
                 .build();
@@ -66,7 +81,7 @@ public class ExceptionController {
     ){
         var response = CustomExceptionDto.builder()
                 .date(new Date())
-                .statusCode(400)
+                .statusCode(HttpStatus.BAD_REQUEST.value())
                 .message("Invalid JWT token.")
                 .path(request.getRequestURI())
                 .build();
@@ -90,7 +105,7 @@ public class ExceptionController {
     ){
         var response = CustomExceptionDto.builder()
                 .date(new Date())
-                .statusCode(500)
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message(e.getMessage())
                 .path(request.getRequestURI())
                 .build();
