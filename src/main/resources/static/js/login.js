@@ -43,7 +43,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             throw new Error('Login failed');
         }
 
-        window.location.href = 'index.html'
+        window.location.href = '/chat'
         const data = await response.json();
         console.log('Login successful');
     } catch (error) {
