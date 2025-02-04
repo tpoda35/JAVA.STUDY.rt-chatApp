@@ -1,11 +1,12 @@
 package com.rt_chatApp.security.user;
 
+import com.nimbusds.openid.connect.sdk.claims.UserInfo;
+import com.rt_chatApp.Dto.UserInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -23,5 +24,15 @@ public class UserController {
     ) {
         service.changePassword(request, connectedUser);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/getUserInfo")
+    public UserInfoDto getUserInfo() {
+        User user = service.getUser();
+
+        return UserInfoDto.builder()
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .build();
     }
 }
