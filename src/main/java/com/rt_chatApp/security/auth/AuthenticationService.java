@@ -4,10 +4,7 @@ import com.rt_chatApp.security.config.JwtService;
 import com.rt_chatApp.security.token.Token;
 import com.rt_chatApp.security.token.TokenRepository;
 import com.rt_chatApp.security.token.TokenType;
-import com.rt_chatApp.security.user.AuthProvider;
-import com.rt_chatApp.security.user.Role;
-import com.rt_chatApp.security.user.User;
-import com.rt_chatApp.security.user.UserRepository;
+import com.rt_chatApp.security.user.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +44,7 @@ public class AuthenticationService {
         .password(passwordEncoder.encode(request.getPassword()))
         .role(Role.USER)
         .authProvider(AuthProvider.LOCAL)
+        .status(Status.ONLINE)
         .build();
     var savedUser = repository.save(user);
   }
