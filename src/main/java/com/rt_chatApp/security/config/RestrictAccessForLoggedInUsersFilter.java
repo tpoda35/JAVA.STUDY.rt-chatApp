@@ -29,7 +29,7 @@ public class RestrictAccessForLoggedInUsersFilter extends OncePerRequestFilter {
                 !"anonymousUser".equals(authentication.getPrincipal()) &&
                 ("/login.html".equals(uri) || "/register.html".equals(uri))
         ) {
-            response.sendRedirect("/chat");
+            response.sendRedirect("/");
             return;
         }
 
