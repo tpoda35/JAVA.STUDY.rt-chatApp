@@ -1,8 +1,6 @@
 package com.rt_chatApp.Dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +17,8 @@ import java.util.Date;
 public class ChatMessage {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String chatId;
     private Integer senderId;
     private Integer recipientId;
