@@ -30,6 +30,7 @@ public class User implements UserDetails {
 
   private String password;
 
+  @Enumerated(EnumType.STRING)
   private Status status;
 
   @Enumerated(EnumType.STRING)
@@ -40,6 +41,7 @@ public class User implements UserDetails {
 
   @OneToMany(mappedBy = "user")
   @JsonIgnore
+  @ToString.Exclude
   private List<Token> tokens;
 
   @Override
