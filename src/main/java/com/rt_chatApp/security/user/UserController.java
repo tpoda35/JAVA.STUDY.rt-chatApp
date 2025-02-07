@@ -33,6 +33,7 @@ public class UserController {
         return UserInfoDto.builder()
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
+                .userId(user.getId())
                 .build();
     }
 }
