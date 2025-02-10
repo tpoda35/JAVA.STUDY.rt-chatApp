@@ -8,7 +8,6 @@ const chatHeaderUsername = document.querySelector('#chat-header-username');
 
 let stompClient = null;
 let firstName = null;
-let lastName = null;
 let selectedUserId = null;
 let userId = null;
 
@@ -30,8 +29,9 @@ async function connectUser(){
         const data = await response.json();
 
         firstName = data.firstname;
-        lastName = data.lastname;
         userId = data.userId;
+
+        console.log(userId);
 
         connect();
     } catch (error) {
@@ -41,7 +41,7 @@ async function connectUser(){
 
 function connect(event) {
 
-    if (firstName && lastName) {
+    if (firstName) {
         const socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
 
