@@ -47,11 +47,10 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         const data = await response.json();
         console.log('Login successful');
     } catch (error) {
-
         console.error('Login error:', error);
     }
 });
 
-function redirectToGoogle() {
+document.getElementById('google-login-btn').addEventListener('click', () => {
     window.location.href = 'http://localhost:8080/oauth2/authorization/google';
-}
+});
