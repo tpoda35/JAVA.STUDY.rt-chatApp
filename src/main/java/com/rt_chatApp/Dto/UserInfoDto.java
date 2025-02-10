@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class UserInfoDto {
     private Integer userId;
     private String firstname;
-    private String lastname;
 }
