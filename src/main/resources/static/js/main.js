@@ -1,8 +1,10 @@
 'use strict';
 
+const fullChatArea = document.querySelector('.chat-area');
 const chatArea = document.querySelector('#chat-message');
 const messageForm = document.querySelector('#messageForm');
 const messageInput = document.querySelector('#message');
+const chatHeaderUsername = document.querySelector('#chat-header-username');
 
 let stompClient = null;
 let firstName = null;
@@ -30,8 +32,6 @@ async function connectUser(){
         firstName = data.firstname;
         lastName = data.lastname;
         userId = data.userId;
-
-        console.log(data.userId);
 
         connect();
     } catch (error) {
@@ -65,23 +65,12 @@ async function findAndDisplayConnectedUsers() {
     const connectedUsersResponse = await fetch('/users');
     let connectedUsers = await connectedUsersResponse.json();
 
-    // ------
-    connectedUsers.forEach(user => {
-        console.log(user);
-    });
-    // ------
-
     connectedUsers = connectedUsers.filter(user => user.id !== userId);
     const connectedUsersList = document.getElementById('connectedUsers');
     connectedUsersList.innerHTML = '';
 
     connectedUsers.forEach(user => {
         appendUserElement(user, connectedUsersList);
-        if (connectedUsers.indexOf(user) < connectedUsers.length - 1) {
-            const separator = document.createElement('li');
-            separator.classList.add('separator');
-            connectedUsersList.appendChild(separator);
-        }
     });
 }
 
@@ -90,15 +79,16 @@ function appendUserElement(user, connectedUsersList) {
     listItem.classList.add('user-item');
     listItem.id = user.id;
 
-    console.log(user.id);
+    const iconImg = document.createElement('img');
+    iconImg.src = '../image/user_icon.png';
+    iconImg.alt = 'User Icon';
+    iconImg.classList.add('user-icon');
+    listItem.appendChild(iconImg);
 
     const usernameSpan = document.createElement('span');
     usernameSpan.textContent = user.firstname;
 
-    //Here can we add later the notifications.
-
     listItem.appendChild(usernameSpan);
-
     listItem.addEventListener('click', userItemClick);
 
     connectedUsersList.appendChild(listItem);
@@ -108,10 +98,15 @@ function userItemClick(event) {
     document.querySelectorAll('.user-item').forEach(item => {
         item.classList.remove('active');
     });
-    messageForm.classList.remove('hidden');
 
     const clickedUser = event.currentTarget;
     clickedUser.classList.add('active');
+
+    updateChatAreaVisibility();
+    const usernameSpan = clickedUser.querySelector('span');
+    if (usernameSpan) {
+        chatHeaderUsername.textContent = usernameSpan.textContent;
+    }
 
     selectedUserId = clickedUser.getAttribute('id');
     fetchAndDisplayUserChat().then();
@@ -172,6 +167,16 @@ async function onMessageReceived(payload) {
     if (Number(selectedUserId) && Number(selectedUserId) === Number(message.senderId)) {
         displayMessage(message.senderId, message.content);
         chatArea.scrollTop = chatArea.scrollHeight;
+    }
+}
+
+function updateChatAreaVisibility(){
+    let activeUser = document.querySelector('.user-item.active');
+
+    if (activeUser !== null){
+        fullChatArea.style.display = 'flex';
+    } else {
+        fullChatArea.style.display = 'none';
     }
 }
 
