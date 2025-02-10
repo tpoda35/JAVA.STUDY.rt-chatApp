@@ -91,7 +91,6 @@ html, body {
 .row {
      margin: 0;
 }
-
 .sender {
     background-color: #dcf8c6;
     color: #000;
@@ -99,10 +98,8 @@ html, body {
     margin: 8px 0;
     border-radius: 15px 15px 15px 0;
     max-width: 70%;
-    /* Default alignment (left) or use margin-right: auto if desired */
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
-
 .receiver {
     background-color: #fff;
     color: #000;
@@ -110,7 +107,22 @@ html, body {
     margin: 8px 0;
     border-radius: 15px 15px 0 15px;
     max-width: 70%;
-    margin-left: auto;  /* Pushes the message to the right */
+    margin-left: auto;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
     border: 1px solid #f1f1f1;
+}
+.google-btn {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.google-btn img {
+    width: 20px;
+    margin-right: 10px;
 }
