@@ -22,7 +22,7 @@ public class HomeController {
             model.addAttribute("fName", service.getAuthenticatedUserName());
             return "index";
         }
-        return "login.html";
+        return "redirect:/login";
     }
 
 }
