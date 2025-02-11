@@ -31,8 +31,6 @@ async function connectUser(){
         firstName = data.firstname;
         userId = data.userId;
 
-        console.log(userId);
-
         connect();
     } catch (error) {
         console.error('Error:', error);
@@ -40,22 +38,30 @@ async function connectUser(){
 }
 
 function connect(event) {
-
     if (firstName) {
         const socket = new SockJS('/ws');
-        stompClient = Stomp.over(socket);
+        socket.onclose = function(event) {
+            disconnectUser();
+        }
 
+        stompClient = Stomp.over(socket);
         stompClient.connect({}, onConnected, onError);
     }
-
     if (event) {
         event.preventDefault();
     }
 }
 
 function onConnected() {
+    if (stompClient.ws) {
+        stompClient.ws.onclose = function(event) {
+            disconnectUser();
+        }
+    }
+
     stompClient.subscribe(`/user/${userId}/queue/messages`, onMessageReceived);
     stompClient.subscribe(`/user/public`, onMessageReceived);
+    connectUser();
 
     console.log('Getting connected users...');
     findAndDisplayConnectedUsers().then();
@@ -78,6 +84,11 @@ function appendUserElement(user, connectedUsersList) {
     const listItem = document.createElement('li');
     listItem.classList.add('user-item');
     listItem.id = user.id;
+
+    const statusDot = document.createElement('span');
+    statusDot.classList.add('status-indicator');
+    statusDot.classList.add(user.status);
+    listItem.appendChild(statusDot);
 
     const iconImg = document.createElement('img');
     iconImg.src = '../image/user_icon.png';
@@ -178,6 +189,16 @@ function updateChatAreaVisibility(){
     } else {
         fullChatArea.style.display = 'none';
     }
+}
+
+function connectUser(){
+    const user = { id: userId }
+    stompClient.send("/user.connectUser", JSON.stringify(user));
+}
+
+function disconnectUser(){
+    const user = { id: userId }
+    stompClient.send("/user.disconnectUser", JSON.stringify(user));
 }
 
 messageForm.addEventListener('submit', sendMessage, true);
