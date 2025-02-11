@@ -9,18 +9,12 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     const email = document.getElementById('email');
     const password = document.getElementById('password');
     const cPassword = document.getElementById('cpassword');
-    const message = document.getElementById('message');
-
-    // Reset previous error messages
-    message.style.display = 'none';
-    message.textContent = "";
 
     let isValid = true; // Track validation status
 
     // Password match check
     if (password.value !== cPassword.value) {
-        message.style.display = 'block';
-        message.textContent = "Passwords do not match!";
+        toastr.error('Passwords does not match.', 'Error');
         isValid = false;
     }
 
@@ -63,16 +57,18 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         if (contentType && contentType.includes('application/json')) {
             data = await response.json();
         } else {
-            data = await response.text(); // Handle non-JSON responses
+            data = await response.text();
         }
 
         if (!response.ok) {
-            message.textContent = data.error;
-            message.style.display = 'block';
+            toastr.error(data.error, 'Error');
             throw new Error(data.error);
         }
 
-        console.log('Registration successful');
+        toastr.success('Redirecting to login page.', 'Successful registration.');
+        setTimeout(function() {
+            window.location.href = '/';
+        }, 2000);
     } catch (error) {
         console.error('Registration error:', error);
     }

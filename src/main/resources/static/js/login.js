@@ -6,7 +6,6 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     // Get input values
     const email = document.getElementById('email');
     const password = document.getElementById('password');
-    const invalid = document.getElementById('invalid-cred');
 
     // Basic validation
     if (email.value.trim() === '') {
@@ -37,15 +36,13 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
 
         if (!response.ok) {
             if (response.status == 400){
-                console.log('Invalid credentials.')
-                invalid.style.display = 'block';
+                toastr.error('Invalid credentials.', 'Error');
             }
             throw new Error('Login failed');
         }
 
-        window.location.href = '/'
-        const data = await response.json();
         console.log('Login successful');
+        window.location.href = '/';
     } catch (error) {
         console.error('Login error:', error);
     }
