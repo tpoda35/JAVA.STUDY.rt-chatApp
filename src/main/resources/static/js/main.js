@@ -40,11 +40,10 @@ async function connectUser(){
 function connect(event) {
     if (firstName) {
         const socket = new SockJS('/ws');
-        socket.onclose = function(event) {
-            disconnectUser();
-        }
-
         stompClient = Stomp.over(socket);
+
+        stompClient.heartbeat.outgoing = 10000;
+        stompClient.heartbeat.incoming = 10000;
         stompClient.connect({}, onConnected, onError);
     }
     if (event) {
@@ -53,17 +52,14 @@ function connect(event) {
 }
 
 function onConnected() {
-    if (stompClient.ws) {
-        stompClient.ws.onclose = function(event) {
-            disconnectUser();
-        }
-    }
-
     stompClient.subscribe(`/user/${userId}/queue/messages`, onMessageReceived);
     stompClient.subscribe(`/user/public`, onMessageReceived);
-    connectUser();
+    stompClient.subscribe("/topic/online-users", (message) => {
+        console.log("User status update:", message.body);
+    });
 
     console.log('Getting connected users...');
+    setInterval(sendHeartbeat, 10000);
     findAndDisplayConnectedUsers().then();
 }
 
@@ -191,14 +187,11 @@ function updateChatAreaVisibility(){
     }
 }
 
-function connectUser(){
-    const user = { id: userId }
-    stompClient.send("/user.connectUser", JSON.stringify(user));
-}
-
-function disconnectUser(){
-    const user = { id: userId }
-    stompClient.send("/user.disconnectUser", JSON.stringify(user));
+function sendHeartbeat(){
+    if (stompClient && stompClient.connected){
+        stompClient.send("/connection/heartbeat", {}, "heartbeat");
+        console.log("Heartbeat send.");
+    }
 }
 
 messageForm.addEventListener('submit', sendMessage, true);
