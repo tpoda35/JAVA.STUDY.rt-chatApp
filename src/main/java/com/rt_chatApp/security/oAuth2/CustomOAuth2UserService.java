@@ -1,6 +1,9 @@
 package com.rt_chatApp.security.oAuth2;
 
-import com.rt_chatApp.security.user.*;
+import com.rt_chatApp.security.user.AuthProvider;
+import com.rt_chatApp.security.user.Role;
+import com.rt_chatApp.security.user.User;
+import com.rt_chatApp.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -9,7 +12,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import static com.rt_chatApp.security.user.Status.ONLINE;
+import static com.rt_chatApp.security.user.Status.OFFLINE;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +34,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     newUser.setFirstname(fName);
                     newUser.setAuthProvider(AuthProvider.GOOGLE);
                     newUser.setRole(Role.USER);
-                    newUser.setStatus(ONLINE);
+                    newUser.setStatus(OFFLINE);
                     return repository.save(newUser);
                 });
 
