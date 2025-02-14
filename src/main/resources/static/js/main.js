@@ -44,6 +44,7 @@ function connect(event) {
 
         stompClient.heartbeat.outgoing = 10000;
         stompClient.heartbeat.incoming = 10000;
+
         stompClient.connect({}, onConnected, onError);
     }
     if (event) {
@@ -54,12 +55,8 @@ function connect(event) {
 function onConnected() {
     stompClient.subscribe(`/user/${userId}/queue/messages`, onMessageReceived);
     stompClient.subscribe(`/user/public`, onMessageReceived);
-    stompClient.subscribe("/topic/online-users", (message) => {
-        console.log("User status update:", message.body);
-    });
 
     console.log('Getting connected users...');
-    setInterval(sendHeartbeat, 10000);
     findAndDisplayConnectedUsers().then();
 }
 
@@ -184,13 +181,6 @@ function updateChatAreaVisibility(){
         fullChatArea.style.display = 'flex';
     } else {
         fullChatArea.style.display = 'none';
-    }
-}
-
-function sendHeartbeat(){
-    if (stompClient && stompClient.connected){
-        stompClient.send("/connection/heartbeat", {}, "heartbeat");
-        console.log("Heartbeat send.");
     }
 }
 
