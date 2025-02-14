@@ -1,6 +1,7 @@
 package com.rt_chatApp.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.DefaultContentTypeResolver;
@@ -19,11 +20,15 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON;
 
 @Configuration
 @EnableWebSocketMessageBroker
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private final CustomHandshakeHandler handshakeHandler;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
+                .setHandshakeHandler(handshakeHandler)
                 .withSockJS();
     }
 
