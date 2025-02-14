@@ -82,7 +82,7 @@ public class AuthenticationService {
   // The method need a user object and a JWT token.
   // A new Token object is created with that data and saved to the database.
   @Transactional
-  private void saveUserToken(User user, String jwtToken) {
+  protected void saveUserToken(User user, String jwtToken) {
     var token = Token.builder()
         .user(user)
         .token(jwtToken)
@@ -98,7 +98,7 @@ public class AuthenticationService {
   // The method need a user object.
   // The code gets all the valid user token, where the Expiration && Revoked is not true and modifies them to true.
   @Transactional
-  private void revokeAllUserTokens(User user) {
+  protected void revokeAllUserTokens(User user) {
     var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
     if (validUserTokens.isEmpty())
       return;
