@@ -40,4 +40,22 @@ public class UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (User) authentication.getPrincipal();
     }
+
+    public void disconnect(Integer id){
+        var storedUser = repository.findById(id)
+                .orElse(null);
+        if (storedUser != null){
+            storedUser.setStatus(Status.OFFLINE);
+            repository.save(storedUser);
+        }
+    }
+
+    public void connect(Integer id) {
+        var storedUser = repository.findById(id)
+                .orElse(null);
+        if (storedUser != null){
+            storedUser.setStatus(Status.ONLINE);
+            repository.save(storedUser);
+        }
+    }
 }
