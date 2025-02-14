@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 
+import static com.rt_chatApp.security.user.AuthProvider.LOCAL;
+import static com.rt_chatApp.security.user.Status.OFFLINE;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -43,8 +46,8 @@ public class AuthenticationService {
         .email(request.getEmail())
         .password(passwordEncoder.encode(request.getPassword()))
         .role(Role.USER)
-        .authProvider(AuthProvider.LOCAL)
-        .status(Status.ONLINE)
+        .authProvider(LOCAL)
+        .status(OFFLINE)
         .build();
     var savedUser = repository.save(user);
   }
