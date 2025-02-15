@@ -2,11 +2,9 @@ package com.rt_chatApp.controller;
 
 import com.rt_chatApp.Dto.ChatMessage;
 import com.rt_chatApp.Dto.ChatNotification;
-import com.rt_chatApp.security.user.Status;
-import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserService;
 import com.rt_chatApp.services.ChatMessageService;
-import com.rt_chatApp.services.ChatService;
+import com.rt_chatApp.services.UserStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -24,9 +22,8 @@ public class ChatController {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final ChatMessageService chatMessageService;
-    private final ChatService chatService;
-
     private final UserService userService;
+    private final UserStatusService userStatusService;
 
     @MessageMapping("/chat")
     public void processMessage(
@@ -50,17 +47,5 @@ public class ChatController {
              @PathVariable("recipientId") Integer recipientId
     ) {
         return ResponseEntity.ok(chatMessageService.findChatMessages(senderId, recipientId));
-    }
-
-    @GetMapping("/users")
-    public ResponseEntity<List<User>> findConnectedUsers() {
-        return ResponseEntity.ok(chatService.findConnectedUsers());
-    }
-
-    @GetMapping("/isOnline/{id}")
-    public Status findUser(
-            @PathVariable("id") Integer id
-    ){
-        return userService.getUser().getStatus();
     }
 }
