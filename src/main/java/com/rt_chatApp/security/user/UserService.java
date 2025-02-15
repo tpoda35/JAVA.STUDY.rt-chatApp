@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 
+import static com.rt_chatApp.security.user.Status.*;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -45,7 +47,7 @@ public class UserService {
         var storedUser = repository.findById(id)
                 .orElse(null);
         if (storedUser != null){
-            storedUser.setStatus(Status.OFFLINE);
+            storedUser.setStatus(OFFLINE);
             repository.save(storedUser);
         }
     }
@@ -54,7 +56,16 @@ public class UserService {
         var storedUser = repository.findById(id)
                 .orElse(null);
         if (storedUser != null){
-            storedUser.setStatus(Status.ONLINE);
+            storedUser.setStatus(ONLINE);
+            repository.save(storedUser);
+        }
+    }
+
+    public void idle(Integer id) {
+        var storedUser = repository.findById(id)
+                .orElse(null);
+        if (storedUser != null){
+            storedUser.setStatus(IDLE);
             repository.save(storedUser);
         }
     }
