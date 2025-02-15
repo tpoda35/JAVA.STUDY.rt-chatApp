@@ -42,9 +42,6 @@ function connect(event) {
         const socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
 
-        stompClient.heartbeat.outgoing = 10000;
-        stompClient.heartbeat.incoming = 10000;
-
         stompClient.connect({}, onConnected, onError);
     }
     if (event) {
@@ -55,32 +52,33 @@ function connect(event) {
 function onConnected() {
     stompClient.subscribe(`/user/${userId}/queue/messages`, onMessageReceived);
     stompClient.subscribe(`/user/public`, onMessageReceived);
-
-    console.log('Getting connected users...');
-    findAndDisplayConnectedUsers().then();
+    stompClient.subscribe(`/topic/onlineUsers`, onlineUsers);
 }
 
-async function findAndDisplayConnectedUsers() {
-    const connectedUsersResponse = await fetch('/users');
-    let connectedUsers = await connectedUsersResponse.json();
+function onlineUsers(message) {
+    let users = JSON.parse(message.body);
+    updateUserList(users);
+}
 
-    connectedUsers = connectedUsers.filter(user => user.id !== userId);
+function updateUserList(users){
     const connectedUsersList = document.getElementById('connectedUsers');
     connectedUsersList.innerHTML = '';
 
-    connectedUsers.forEach(user => {
-        appendUserElement(user, connectedUsersList);
+    Object.entries(users).forEach(([key, value]) => {
+        if (Number(key) !== userId) {
+            appendUserElement(key, value, connectedUsersList);
+        }
     });
 }
 
-function appendUserElement(user, connectedUsersList) {
+function appendUserElement(key, value, connectedUsersList) {
     const listItem = document.createElement('li');
     listItem.classList.add('user-item');
-    listItem.id = user.id;
+    listItem.id = key;
 
     const statusDot = document.createElement('span');
     statusDot.classList.add('status-indicator');
-    statusDot.classList.add(user.status);
+    statusDot.classList.add('ONLINE');
     listItem.appendChild(statusDot);
 
     const iconImg = document.createElement('img');
@@ -90,7 +88,7 @@ function appendUserElement(user, connectedUsersList) {
     listItem.appendChild(iconImg);
 
     const usernameSpan = document.createElement('span');
-    usernameSpan.textContent = user.firstname;
+    usernameSpan.textContent = value;
 
     listItem.appendChild(usernameSpan);
     listItem.addEventListener('click', userItemClick);
@@ -164,7 +162,6 @@ function sendMessage(event) {
 }
 
 async function onMessageReceived(payload) {
-    await findAndDisplayConnectedUsers();
     console.log('Message received', payload);
     const message = JSON.parse(payload.body);
 
