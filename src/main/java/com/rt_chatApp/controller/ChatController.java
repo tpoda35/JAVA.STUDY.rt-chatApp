@@ -1,6 +1,6 @@
 package com.rt_chatApp.controller;
 
-import com.rt_chatApp.Dto.ChatMessage;
+import com.rt_chatApp.Model.ChatMessage;
 import com.rt_chatApp.Dto.ChatNotification;
 import com.rt_chatApp.security.user.UserService;
 import com.rt_chatApp.services.ChatMessageService;
