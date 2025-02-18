@@ -3,62 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" href="../static/css/main.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <title>Chat Application</title>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row chat-container">
-            <!-- Users List Section -->
-            <div class="col-md-4 col-lg-3 users-list p-0">
-                <div>
-                    <h3 class="m-3">Welcome, <span th:text="${fName}"></span>!</h3>
-                </div>
-                <div class="user-search">
-                    <h4 class="mb-3">Messages</h4>
-                    <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="fas fa-search"></i>
-                            </span>
-                        <input type="text" class="form-control" placeholder="Search users...">
-                    </div>
-                </div>
-
-                <!-- User List Items -->
-                <div class="list-group list-group-flush">
-                    <ul id="connectedUsers">
-                    </ul>
-                </div>
+    <div class="custom-container">
+        <div class="first-column base-column gap-5">
+            <div class="mt-4">
+                <a href="" data-bs-toggle="tooltip" data-bs-placement="top" title="User Profile">
+                    <i class="fa-solid fa-user"></i>
+                </a>
             </div>
 
-            <!-- Chat Area Section -->
-            <div class="col-md-8 col-lg-9 chat-area">
-                <div class="chat-header">
-                    <div class="d-flex align-items-center">
-                        <div>
-                            <h5 class="mb-0" id="chat-header-username"></h5>
-                        </div>
-                    </div>
-                </div>
+            <div class="middle-group">
+                <a href="" data-bs-toggle="tooltip" data-bs-placement="top" title="Messages">
+                    <i class="fa-solid fa-comment"></i>
+                </a>
+                <a href="" data-bs-toggle="tooltip" data-bs-placement="top" title="Groups">
+                    <i class="fa-solid fa-comments"></i>
+                </a>
+                <a href="" data-bs-toggle="tooltip" data-bs-placement="top" title="Liked">
+                    <i class="fa-solid fa-star"></i>
+                </a>
+            </div>
 
-                <div class="chat-messages" id="chat-message"></div>
+            <div class="mb-4">
+                <a href="" data-bs-toggle="tooltip" data-bs-placement="top" title="Settings">
+                    <i class="fa-solid fa-gear"></i>
+                </a>
+            </div>
+        </div>
 
+        <div class="second-column base-column">
+            <div class="header1">
+                 <div class="input-group w-75 rounded-border">
+                     <span class="input-group-text">
+                         <i class="fas fa-search"></i>
+                     </span>
+                     <input type="text" class="form-control" placeholder="Search inbox...">
+                 </div>
+            </div>
+            <div class="w-100">
+                <ul id="connectedUsers">
+<!--                    <li class="user-item">-->
+<!--                        <span class="status-indicator ONLINE"></span>-->
+<!--                        <img src="../static/image/user_icon.png" alt="" class="user-icon">-->
+<!--                        <span class="user-text">Test</span>-->
+<!--                    </li>-->
+<!--                    <li class="user-item">-->
+<!--                        <span class="status-indicator ONLINE"></span>-->
+<!--                        <img src="../static/image/user_icon.png" alt="" class="user-icon">-->
+<!--                        <span class="user-text">Test2</span>-->
+<!--                    </li>-->
+                </ul>
+            </div>
+        </div>
+
+        <div class="third-column base-column">
+            <div class="header2">
+                <img src="../static/image/user_icon.png" alt="" class="header2-icon">
+                <span class="header2-text">Username</span>
+            </div>
+
+            <div class="chat-messages" id="chat-message"></div>
+
+            <div class="bottom-part ">
                 <form id="messageForm" name="messageForm" class="hidden">
-                    <div class="message-input">
-                        <div class="input-group">
-                            <input autocomplete="off" type="text" id="message" placeholder="Type your message..." class="form-control">
-                            <button class="btn btn-primary">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
+                    <div class="message-input input-group">
+                        <input autocomplete="off" type="text" id="message" placeholder="Type your message..." class="form-control">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
                     </div>
                 </form>
             </div>
+        </div>
+
+        <div class="fourth-column base-column">
 
         </div>
     </div>
+
+        <!--        <div class="row chat-container">-->
+<!--            <div class="list-group list-group-flush">-->
+    <!--                <ul id="connectedUsers">-->
+    <!--                </ul>-->
+<!--            </div>-->
+
+            <!-- Chat Area Section -->
+<!--            <div class="col-md-8 col-lg-9 chat-area">-->
+<!--                <div class="chat-header">-->
+<!--                    <div class="d-flex align-items-center">-->
+<!--                        <div>-->
+<!--                            <h5 class="mb-0" id="chat-header-username"></h5>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div class="chat-messages" id="chat-message"></div>-->
+
+<!--                <form id="messageForm" name="messageForm" class="hidden">-->
+<!--                    <div class="message-input">-->
+<!--                        <div class="input-group">-->
+<!--                            <input autocomplete="off" type="text" id="message" placeholder="Type your message..." class="form-control">-->
+<!--                            <button class="btn btn-primary">-->
+<!--                                <i class="fas fa-paper-plane"></i>-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+
+
 
     <script th:src="@{/js/main.js}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
