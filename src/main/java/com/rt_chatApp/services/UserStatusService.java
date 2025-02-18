@@ -15,7 +15,7 @@ public class UserStatusService {
     private static final ConcurrentHashMap<Integer, String> onlineUsers = new ConcurrentHashMap<>();
 
     public void addUser(Integer id){
-        userRepository.findById(id).ifPresent(user -> onlineUsers.put(user.getId(), user.getFirstname()));
+        userRepository.findById(id).ifPresent(user -> onlineUsers.put(user.getId(), user.getDisplayName()));
         var users = onlineUsers;
     }
 
