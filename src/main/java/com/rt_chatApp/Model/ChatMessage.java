@@ -1,4 +1,4 @@
-package com.rt_chatApp.Dto;
+package com.rt_chatApp.Model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,5 +24,4 @@ public class ChatMessage {
     private Integer recipientId;
     private String content;
     private Date timeStamp;
-
 }
