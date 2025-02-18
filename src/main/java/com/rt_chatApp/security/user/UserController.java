@@ -28,7 +28,7 @@ public class UserController {
         User user = service.getUser();
 
         return UserInfoDto.builder()
-                .firstname(user.getFirstname())
+                .displayName(user.getDisplayName())
                 .userId(user.getId())
                 .build();
     }
