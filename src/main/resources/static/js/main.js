@@ -4,10 +4,9 @@ const fullChatArea = document.querySelector('.chat-area');
 const chatArea = document.querySelector('#chat-message');
 const messageForm = document.querySelector('#messageForm');
 const messageInput = document.querySelector('#message');
-const chatHeaderUsername = document.querySelector('#chat-header-username');
 
 let stompClient = null;
-let firstName = null;
+let dName = null;
 let selectedUserId = null;
 let userId = null;
 
@@ -28,7 +27,7 @@ async function connectUser(){
 
         const data = await response.json();
 
-        firstName = data.firstname;
+        dName = data.displayName;
         userId = data.userId;
 
         connect();
@@ -38,7 +37,7 @@ async function connectUser(){
 }
 
 function connect(event) {
-    if (firstName) {
+    if (dName) {
         const socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
 
@@ -104,12 +103,6 @@ function userItemClick(event) {
     const clickedUser = event.currentTarget;
     clickedUser.classList.add('active');
 
-    updateChatAreaVisibility();
-    const usernameSpan = clickedUser.querySelector('span');
-    if (usernameSpan) {
-        chatHeaderUsername.textContent = usernameSpan.textContent;
-    }
-
     selectedUserId = clickedUser.getAttribute('id');
     fetchAndDisplayUserChat().then();
 }
@@ -131,7 +124,7 @@ function displayMessage(senderId, content) {
 async function fetchAndDisplayUserChat() {
     const userChatResponse = await fetch(`/messages/${userId}/${selectedUserId}`);
     const userChat = await userChatResponse.json();
-    console.log(userChat);
+
     chatArea.innerHTML = '';
     userChat.forEach(chat => {
         displayMessage(chat.senderId, chat.content);
@@ -168,16 +161,6 @@ async function onMessageReceived(payload) {
     if (Number(selectedUserId) && Number(selectedUserId) === Number(message.senderId)) {
         displayMessage(message.senderId, message.content);
         chatArea.scrollTop = chatArea.scrollHeight;
-    }
-}
-
-function updateChatAreaVisibility(){
-    let activeUser = document.querySelector('.user-item.active');
-
-    if (activeUser !== null){
-        fullChatArea.style.display = 'flex';
-    } else {
-        fullChatArea.style.display = 'none';
     }
 }
 
