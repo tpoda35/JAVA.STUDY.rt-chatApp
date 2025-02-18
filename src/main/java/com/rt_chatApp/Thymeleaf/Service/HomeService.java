@@ -12,7 +12,7 @@ public class HomeService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.getPrincipal() instanceof User user){
-            return user.getFirstname();
+            return user.getDisplayName();
         }
 
         return null;
