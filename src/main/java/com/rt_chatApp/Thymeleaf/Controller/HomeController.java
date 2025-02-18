@@ -19,7 +19,7 @@ public class HomeController {
             Authentication authentication
     ) {
         if (authentication != null && authentication.isAuthenticated()) {
-            model.addAttribute("fName", service.getAuthenticatedUserName());
+            model.addAttribute("dName", service.getAuthenticatedUserName());
             return "index";
         }
         return "redirect:/login";
