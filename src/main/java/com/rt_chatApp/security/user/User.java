@@ -3,29 +3,39 @@ package com.rt_chatApp.security.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rt_chatApp.security.token.Token;
 import jakarta.persistence.*;
-
-import java.util.Collection;
-import java.util.List;
-
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_user")
+@Table(
+        name = "_user",
+        indexes = {
+                @Index(name = "idx_unique_identifier", columnList = "uniqueIdentifier", unique = true)
+        }
+)
 public class User implements UserDetails {
 
   @Id
   @GeneratedValue
   private Integer id;
-  private String firstname;
-  private String lastname;
 
-  @Column(unique = true, nullable = false )
+  @Column(nullable = false)
+  private String displayName;
+
+  @Column(nullable = false, unique = true)
+  private String uniqueIdentifier;
+
+  @Column(unique = true, nullable = false)
+  @Email(message = "Invalid email format.")
   private String email;
 
   private String password;
@@ -43,6 +53,22 @@ public class User implements UserDetails {
   @JsonIgnore
   @ToString.Exclude
   private List<Token> tokens;
+
+  // Not implemented.
+  @ManyToMany
+  @JoinTable(
+          name = "user_friends",
+          joinColumns = @JoinColumn(name = "user_id"),
+          inverseJoinColumns = @JoinColumn(name = "friend_id")
+  )
+  @JsonIgnore
+  @ToString.Exclude
+  private List<User> friends;
+
+  @PrePersist
+  protected void createIdentifier(){
+    uniqueIdentifier = displayName + "#" + id;
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
