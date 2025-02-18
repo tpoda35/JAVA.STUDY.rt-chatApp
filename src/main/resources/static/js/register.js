@@ -4,8 +4,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     e.preventDefault(); // Prevent default submission
 
     // Get input values
-    const fName = document.getElementById('fname');
-    const lName = document.getElementById('lname');
+    const dName = document.getElementById('dName');
     const email = document.getElementById('email');
     const password = document.getElementById('password');
     const cPassword = document.getElementById('cpassword');
@@ -18,7 +17,13 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         isValid = false;
     }
 
-    // Basic validation
+    if (dName.value.trim() === '') {
+        dName.classList.add('is-invalid');
+        isValid = false;
+    } else {
+        dName.classList.remove('is-invalid');
+    }
+
     if (email.value.trim() === '') {
         email.classList.add('is-invalid');
         isValid = false;
@@ -34,7 +39,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     }
 
     if (!isValid) {
-        return; // Stop execution if validation fails
+        return;
     }
 
     try {
@@ -44,8 +49,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                firstname: fName.value,
-                lastname: lName.value,
+                displayName: dName.value,
                 email: email.value,
                 password: password.value,
                 confirmPassword: cPassword.value
