@@ -3,8 +3,8 @@ package com.rt_chatApp.security.auth;
 import com.rt_chatApp.security.config.JwtService;
 import com.rt_chatApp.security.token.Token;
 import com.rt_chatApp.security.token.TokenRepository;
-import com.rt_chatApp.security.token.TokenType;
-import com.rt_chatApp.security.user.*;
+import com.rt_chatApp.security.user.User;
+import com.rt_chatApp.security.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,15 @@ import org.springframework.stereotype.Service;
 import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 
+import static com.rt_chatApp.security.token.TokenType.BEARER;
 import static com.rt_chatApp.security.user.AuthProvider.LOCAL;
+import static com.rt_chatApp.security.user.Role.USER;
 import static com.rt_chatApp.security.user.Status.OFFLINE;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+
   private final UserRepository repository;
   private final TokenRepository tokenRepository;
   private final PasswordEncoder passwordEncoder;
@@ -41,14 +44,14 @@ public class AuthenticationService {
     }
 
     var user = User.builder()
-        .firstname(request.getFirstname())
-        .lastname(request.getLastname())
-        .email(request.getEmail())
-        .password(passwordEncoder.encode(request.getPassword()))
-        .role(Role.USER)
-        .authProvider(LOCAL)
-        .status(OFFLINE)
-        .build();
+            .displayName(request.getDisplayName())
+            .email(request.getEmail())
+            .password(passwordEncoder.encode(request.getPassword()))
+            .role(USER)
+            .authProvider(LOCAL)
+            .status(OFFLINE)
+            .build();
+
     var savedUser = repository.save(user);
   }
 
@@ -89,7 +92,7 @@ public class AuthenticationService {
     var token = Token.builder()
         .user(user)
         .token(jwtToken)
-        .tokenType(TokenType.BEARER)
+        .tokenType(BEARER)
         .expired(false)
         .revoked(false)
         .build();
