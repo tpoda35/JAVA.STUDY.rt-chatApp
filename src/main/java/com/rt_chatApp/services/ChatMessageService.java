@@ -1,6 +1,6 @@
 package com.rt_chatApp.services;
 
-import com.rt_chatApp.Dto.ChatMessage;
+import com.rt_chatApp.Model.ChatMessage;
 import com.rt_chatApp.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
