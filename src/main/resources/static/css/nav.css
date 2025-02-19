@@ -1,0 +1,36 @@
+/* First Column */
+.first-column {
+    width: 5%;
+    background-color: #191b1f;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.first-column a {
+    color: white;
+}
+
+.first-column a:hover {
+    background: rgb(130,41,67);
+    background: linear-gradient(180deg, rgba(130,41,67,1) 0%, rgba(142,66,196,1) 50%, rgba(82,53,70,1) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-active {
+    background: rgb(130,41,67);
+    background: linear-gradient(180deg, rgba(130,41,67,1) 0%, rgba(142,66,196,1) 50%, rgba(82,53,70,1) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.middle-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 3rem;
+}
+/* First Column end*/
