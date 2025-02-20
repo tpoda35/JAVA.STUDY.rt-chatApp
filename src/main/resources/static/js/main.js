@@ -87,6 +87,7 @@ function appendUserElement(key, value, connectedUsersList) {
     listItem.appendChild(iconImg);
 
     const usernameSpan = document.createElement('span');
+    usernameSpan.classList.add('user-text');
     usernameSpan.textContent = value;
 
     listItem.appendChild(usernameSpan);
