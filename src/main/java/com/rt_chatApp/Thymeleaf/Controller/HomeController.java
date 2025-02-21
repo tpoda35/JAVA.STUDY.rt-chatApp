@@ -20,6 +20,7 @@ public class HomeController {
     ) {
         if (isAuthenticated(authentication)) {
             model.addAttribute("dName", service.getAuthenticatedUserName());
+            model.addAttribute("currentPage", "messages");
             return "index";
         }
         return "redirect:/login";
@@ -31,18 +32,8 @@ public class HomeController {
             Authentication authentication
     ) {
         if (isAuthenticated(authentication)) {
+            model.addAttribute("currentPage", "groups");
             return "groups";
-        }
-        return "redirect:/login";
-    }
-
-    @GetMapping("/friends")
-    public String redirectToFriends(
-            Model model,
-            Authentication authentication
-    ) {
-        if (isAuthenticated(authentication)) {
-            return "friends";
         }
         return "redirect:/login";
     }
@@ -53,6 +44,7 @@ public class HomeController {
             Authentication authentication
     ) {
         if (isAuthenticated(authentication)) {
+            model.addAttribute("currentPage", "settings");
             return "settings";
         }
         return "redirect:/login";
