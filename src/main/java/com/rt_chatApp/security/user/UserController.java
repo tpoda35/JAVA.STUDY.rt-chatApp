@@ -12,20 +12,20 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService service;
+    private final UserService userService;
 
     @PatchMapping
     public ResponseEntity<?> changePassword(
           @RequestBody ChangePasswordRequest request,
           Principal connectedUser
     ) {
-        service.changePassword(request, connectedUser);
+        userService.changePassword(request, connectedUser);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/getUserInfo")
     public UserInfoDto getUserInfo() {
-        User user = service.getUser();
+        User user = userService.getUser();
 
         return UserInfoDto.builder()
                 .displayName(user.getDisplayName())
