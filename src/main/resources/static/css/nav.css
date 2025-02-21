@@ -5,11 +5,14 @@
     justify-content: space-between;
 }
 
-.navbar a {
+.navbar a, button {
     color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
-.navbar a:hover {
+.navbar a:hover, button:hover {
     background: rgb(130,41,67);
     background: linear-gradient(180deg, rgba(130,41,67,1) 0%, rgba(142,66,196,1) 50%, rgba(82,53,70,1) 100%);
     -webkit-background-clip: text;
@@ -29,6 +32,7 @@
 .navbar-middle {
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: space-around;
     gap: 3rem;
 }
