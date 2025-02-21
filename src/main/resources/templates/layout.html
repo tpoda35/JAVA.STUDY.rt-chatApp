@@ -8,42 +8,88 @@
         <link rel="stylesheet" type="text/css" th:href="@{/css/nav.css}" href="../static/css/nav.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
         <title>Chat Application</title>
     </head>
-    <body>
-        <div class="main-container">
-            <div class="navbar base-column gap-5">
-                <div class="mt-4">
-                    <a href="" data-bs-toggle="tooltip" data-bs-placement="top" title="User Profile">
-                        <i class="fa-solid fa-user"></i>
-                    </a>
+        <body>
+            <div class="main-container">
+                <div class="navbar base-column gap-5">
+                    <div class="mt-4">
+                        <a href="" data-bs-toggle="tooltip" data-bs-placement="top" title="User Profile">
+                            <i class="fa-solid fa-user"></i>
+                        </a>
+                    </div>
+
+                    <div class="navbar-middle">
+                        <a th:href="@{/}"
+                           data-bs-toggle="tooltip" data-bs-placement="top" title="Messages">
+                            <i class="fa-solid fa-comment" th:classappend="${currentPage == 'messages'} ? 'navbar-btn-active'"></i>
+                        </a>
+                        <a th:href=" @{/groups}"
+                           data-bs-toggle="tooltip" data-bs-placement="top" title="Groups">
+                            <i class="fa-solid fa-comments" th:classappend="${currentPage == 'groups'} ? 'navbar-btn-active'"></i>
+                        </a>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#friendsModal">
+                            <i class="fa-solid fa-star"></i>
+                        </button>
+                    </div>
+
+                    <div class="mb-4">
+                        <a th:href="@{/settings}"
+                           data-bs-toggle="tooltip" data-bs-placement="top" title="Settings">
+                            <i class="fa-solid fa-gear" th:classappend="${currentPage == 'settings'} ? 'navbar-btn-active'"></i>
+                        </a>
+                    </div>
                 </div>
 
-                <div class="navbar-middle">
-                    <a href="" data-bs-toggle="tooltip" data-bs-placement="top" title="Messages">
-                        <i class="fa-solid fa-comment"></i>
-                    </a>
-                    <a href="" data-bs-toggle="tooltip" data-bs-placement="top" title="Groups">
-                        <i class="fa-solid fa-comments"></i>
-                    </a>
-                    <a href="" data-bs-toggle="tooltip" data-bs-placement="top" title="Friends">
-                        <i class="fa-solid fa-star"></i>
-                    </a>
+                <div layout:fragment="content"></div>
+
+                    <!--        Modals          -->
+                <div class="modal fade" tabindex="-1" id="friendsModal">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content" style="background-color: #191b1f; color: white; border-radius: 10px;">
+                            <div class="modal-header border-0">
+                                <h5 class="modal-title">Add a Friend</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6 border-end" style="max-height: 400px; overflow-y: auto;">
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <button id="friendsBtn" class="btn btn-outline-primary w-50 me-1 active">Sent</button>
+                                            <button id="pendingBtn" class="btn btn-outline-secondary w-50 ms-1">Received</button>
+                                        </div>
+                                        <ul class="list-group bg-dark" id="friendRequestList">
+                                            <!-- Dynamic content will load here -->
+                                        </ul>
+                                    </div>
+
+                                    <!-- Right part: Original Form -->
+                                    <div class="col-md-6">
+                                        <form method="post">
+                                            <div class="mb-3">
+                                                <label for="friendName" class="form-label">Friend's Name</label>
+                                                <input type="text" class="form-control bg-dark text-white border-0" id="friendName" name="name" placeholder="John#152" required>
+                                            </div>
+                                            <div class="modal-footer border-0 p-0">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Add Friend</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mb-4">
-                    <a href="" data-bs-toggle="tooltip" data-bs-placement="top" title="Settings">
-                        <i class="fa-solid fa-gear"></i>
-                    </a>
-                </div>
+                    <script th:src="@{/js/friendSystem.js}"></script>
+                    <script th:src="@{/js/main.js}"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
             </div>
-
-            <div layout:fragment="content"></div>
-        </div>
-
-        <script th:src="@{/js/main.js}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-    </body>
+        </body>
 </html>
