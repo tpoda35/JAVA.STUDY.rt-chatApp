@@ -16,7 +16,7 @@ import static com.rt_chatApp.security.user.Status.*;
 public class UserService {
 
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository repository;
+    private final UserRepository userRepository;
 
     public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
 
@@ -35,7 +35,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
 
         // save the new password
-        repository.save(user);
+        userRepository.save(user);
     }
 
     public User getUser(){
@@ -44,29 +44,29 @@ public class UserService {
     }
 
     public void disconnect(Integer id){
-        var storedUser = repository.findById(id)
+        var storedUser = userRepository.findById(id)
                 .orElse(null);
         if (storedUser != null){
             storedUser.setStatus(OFFLINE);
-            repository.save(storedUser);
+            userRepository.save(storedUser);
         }
     }
 
     public void connect(Integer id) {
-        var storedUser = repository.findById(id)
+        var storedUser = userRepository.findById(id)
                 .orElse(null);
         if (storedUser != null){
             storedUser.setStatus(ONLINE);
-            repository.save(storedUser);
+            userRepository.save(storedUser);
         }
     }
 
     public void idle(Integer id) {
-        var storedUser = repository.findById(id)
+        var storedUser = userRepository.findById(id)
                 .orElse(null);
         if (storedUser != null){
             storedUser.setStatus(IDLE);
-            repository.save(storedUser);
+            userRepository.save(storedUser);
         }
     }
 }
