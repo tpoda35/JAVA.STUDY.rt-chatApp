@@ -42,7 +42,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         }
 
         console.log('Login successful');
-        window.location.href = '/';
+        window.location.href = '/home';
     } catch (error) {
         console.error('Login error:', error);
     }
