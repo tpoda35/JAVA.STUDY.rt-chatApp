@@ -62,6 +62,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 .revoked(false)
                 .build();
         tokenRepository.save(token);
-        response.sendRedirect("/");
+        response.sendRedirect("/home");
     }
 }
