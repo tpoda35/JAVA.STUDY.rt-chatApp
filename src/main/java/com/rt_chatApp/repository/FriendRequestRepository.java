@@ -1,7 +1,6 @@
 package com.rt_chatApp.repository;
 
-import com.rt_chatApp.Dto.FriendRequest;
-import com.rt_chatApp.Enum.FriendRequestStatus;
+import com.rt_chatApp.Model.FriendRequest;
 import com.rt_chatApp.security.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,5 +11,7 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, In
     Optional<List<FriendRequest>> findBySender(User sender);
     Optional<List<FriendRequest>> findByReceiver(User receiver);
 
-    boolean existsBySenderAndReceiverAndStatus(User sender, User receiver, FriendRequestStatus status);
+    boolean existsBySenderAndReceiver(User sender, User receiver);
+
+    List<FriendRequest> findAllByReceiverId(Integer receiverId);
 }
