@@ -1,23 +1,23 @@
-package com.rt_chatApp.Dto;
+package com.rt_chatApp.Model;
 
-import com.rt_chatApp.Enum.FriendRequestStatus;
 import com.rt_chatApp.security.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
-
-import static com.rt_chatApp.Enum.FriendRequestStatus.PENDING;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "_friendRequests")
+@Table(
+        name = "_friendRequests",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_sender_receiver",
+                columnNames = {"sender_id", "receiver_id"}
+        )
+)
 public class FriendRequest {
 
     @Id
@@ -26,20 +26,18 @@ public class FriendRequest {
 
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
+    @ToString.Exclude
     private User sender;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id", nullable = false)
+    @ToString.Exclude
     private User receiver;
-
-    @Enumerated(EnumType.STRING)
-    private FriendRequestStatus status;
 
     private Date createdAt;
 
     @PrePersist
     protected void onCreate() {
-        status = PENDING;
         createdAt = new Date();
     }
 }
