@@ -1,20 +1,25 @@
 package com.rt_chatApp.services;
 
-import com.rt_chatApp.Dto.FriendRequest;
+import com.rt_chatApp.Dto.FriendRequestDto;
+import com.rt_chatApp.Exceptions.UserNotFoundException;
+import com.rt_chatApp.Mapper.FriendRequestMapper;
+import com.rt_chatApp.Model.FriendRequest;
 import com.rt_chatApp.repository.FriendRequestRepository;
 import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserRepository;
 import com.rt_chatApp.security.user.UserService;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import static com.rt_chatApp.Enum.FriendRequestStatus.PENDING;
 
 @Service
 @RequiredArgsConstructor
@@ -24,34 +29,51 @@ public class FriendRequestService {
     private final FriendRequestRepository requestRepository;
     private final UserService userService;
     private final TransactionTemplate transactionTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(FriendRequestService.class);
 
-    public CompletableFuture<Void> sendFriendRequest(String uniqueName) {
-        int senderId = userService.getUser().getId();
+    public void sendFriendRequest(String uniqueName, int senderId) {
+        transactionTemplate.execute(status -> {
+            SecurityContext thread = SecurityContextHolder.getContext();
+            logger.info("Thread context: {}", thread.getAuthentication());
 
-        return CompletableFuture.supplyAsync(() -> transactionTemplate.execute(status -> {
             User receiver = userRepository.findByUniqueIdentifier(uniqueName)
-                    .orElseThrow();
+                    .orElseThrow(() -> new UserNotFoundException("Receiver not found."));
+
+            if (receiver.getId() == senderId) {
+                throw new IllegalStateException("You can't send friend request for yourself.");
+            }
 
             User sender = userRepository.findById(senderId)
-                    .orElseThrow();
+                    .orElseThrow(() -> new UserNotFoundException("Sender not found."));
 
             List<User> friends = sender.getFriends();
             if (friends.contains(receiver) || hasPendingRequest(sender, receiver)) {
-                return null;
+                throw new IllegalStateException("Duplicate request or already friends.");
             }
-            requestRepository.save(
-                FriendRequest.builder()
-                        .sender(sender)
-                        .receiver(receiver)
-                        .build()
-            );
 
+            requestRepository.save(
+                    FriendRequest.builder()
+                            .sender(sender)
+                            .receiver(receiver)
+                            .build()
+            );
             return null;
-        }));
+        });
+    }
+
+    @Async
+    public CompletableFuture<List<FriendRequestDto>> getReceivedRequests(
+            Integer userId
+    ) {
+        List<FriendRequest> friendRequests = requestRepository.findAllByReceiverId(userId);
+        if (friendRequests.isEmpty()){
+            throw new EntityNotFoundException("There's no received requests.");
+        }
+        return CompletableFuture.completedFuture(FriendRequestMapper.INSTANCE.toDtoList(friendRequests));
     }
 
     private boolean hasPendingRequest(User sender, User receiver){
-        return requestRepository.existsBySenderAndReceiverAndStatus(sender, receiver, PENDING) ||
-                requestRepository.existsBySenderAndReceiverAndStatus(receiver, sender, PENDING);
+        return requestRepository.existsBySenderAndReceiver(sender, receiver) ||
+                requestRepository.existsBySenderAndReceiver(receiver, sender);
     }
 }
