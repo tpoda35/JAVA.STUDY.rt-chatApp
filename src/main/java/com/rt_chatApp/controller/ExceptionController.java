@@ -1,6 +1,7 @@
 package com.rt_chatApp.controller;
 
 import com.rt_chatApp.Dto.CustomExceptionDto;
+import com.rt_chatApp.Exceptions.UserNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,17 +12,62 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletionException;
 
 @RestControllerAdvice
 public class ExceptionController {
+    @ExceptionHandler(CompletionException.class)
+    public ResponseEntity<?> handleCompletionException(
+            CompletionException e, HttpServletRequest request
+    ) {
+        Throwable cause = e.getCause();
+
+        if (cause instanceof UserNotFoundException) {
+            return handleUserNotFoundException((UserNotFoundException) cause, request);
+        } else if (cause instanceof IllegalStateException) {
+            return handleIllegalStateException((IllegalStateException) cause, request);
+        }
+
+        return globalExceptionHandler(e, request);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<CustomExceptionDto> handleUserNotFoundException(
+            UserNotFoundException e, HttpServletRequest request
+    ) {
+        var response = CustomExceptionDto.builder()
+                .date(new Date())
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .message(e.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<CustomExceptionDto> handleIllegalStateException(
+            IllegalStateException e, HttpServletRequest request
+    ) {
+        var response = CustomExceptionDto.builder()
+                .date(new Date())
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .message(e.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
     @ExceptionHandler(AuthorizationDeniedException.class)
-    public ResponseEntity<?> handleAuthorizationDeniedException(
+    public ResponseEntity<CustomExceptionDto> handleAuthorizationDeniedException(
             AuthorizationDeniedException e, HttpServletRequest request
     ) {
         var response = CustomExceptionDto.builder()
