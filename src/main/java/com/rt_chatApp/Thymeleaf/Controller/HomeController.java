@@ -13,7 +13,7 @@ public class HomeController {
 
     private final HomeService service;
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public String redirectToIndex(
             Model model,
             Authentication authentication
