@@ -1,7 +1,7 @@
 package com.rt_chatApp.security.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.rt_chatApp.Dto.FriendRequest;
+import com.rt_chatApp.Model.FriendRequest;
 import com.rt_chatApp.security.token.Token;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -62,12 +62,15 @@ public class User implements UserDetails {
           inverseJoinColumns = @JoinColumn(name = "friend_id")
   )
   @JsonIgnore
+  @ToString.Exclude
   private List<User> friends;
 
   @OneToMany(mappedBy = "sender")
+  @ToString.Exclude
   private List<FriendRequest> sentRequests;
 
   @OneToMany(mappedBy = "receiver")
+  @ToString.Exclude
   private List<FriendRequest> receivedRequests;
 
   @PrePersist
