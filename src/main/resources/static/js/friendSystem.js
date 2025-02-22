@@ -2,24 +2,26 @@
 
 const friendRequestList = document.getElementById('friendRequestList');
 
-document.querySelector('#friendsModal form').addEventListener('submit', function (e) {
+document.querySelector('#friendsModal form').addEventListener('submit', function(e) {
     e.preventDefault();
-
     const friendName = document.querySelector('#friendName').value;
 
-    fetch('http://localhost:8080/api/v1/friends/addFriend?uniqueName=' + encodeURIComponent(friendName), {
+    fetch('http://localhost:8080/api/v1/friends/addFriend?receiverUniqueName=' + encodeURIComponent(friendName), {
         method: 'POST'
     })
         .then(response => {
-            if (response.ok) {
-                toastr.success('Friend request sent successfully.', 'Action successful.');
-                const modal = bootstrap.Modal.getInstance(document.getElementById('friendsModal'));
-                modal.hide();
-            } else {
-                toastr.error('Failed to add a friend.', 'Action failed.');
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    const errorMessage = errorData.message;
+                    toastr.error(errorMessage, 'Error');
+                    throw new Error(errorMessage);
+                });
             }
+            return response;
         })
-        .catch(error => console.error('Error:', error));
+        .then(() => {
+            toastr.success('Friend Request sent.');
+        });
 });
 
 function appendRequest(request) {
@@ -29,6 +31,7 @@ function appendRequest(request) {
     listItem.classList.add('text-white');
     listItem.classList.add('border-0');
     listItem.textContent = request.sentBy;
+    listItem.id = request.id;
 
     friendRequestList.appendChild(listItem);
 }
