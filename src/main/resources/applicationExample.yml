@@ -4,8 +4,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/chat-app
-    username: username
-    password: password
+    username: yourname
+    password: yourpass
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -21,8 +21,8 @@ spring:
       client:
         registration:
           google:
-            client-id: yourid
-            client-secret: yoursecret
+            client-id: yourclientid
+            client-secret: yourclientsecret
             scope:
               - email
               - profile
@@ -30,7 +30,7 @@ spring:
 application:
   security:
     jwt:
-      secret-key: your-key
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
       expiration: 1800000 # 30 minutes
       refresh-token:
         expiration: 2592000000 # 30 days
@@ -40,4 +40,9 @@ logging:
     org:
       springframework:
         security: DEBUG
+        messaging: DEBUG
+        web:
+          socket: DEBUG
+        thymeleaf: DEBUG
+
 
