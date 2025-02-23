@@ -23,13 +23,11 @@ public class FriendRequestController {
     private final UserService userService;
     private final Logger logger = LoggerFactory.getLogger(FriendRequestController.class);
 
-    // Async
     @PostMapping("/addFriend")
-    public ResponseEntity<Void> addFriend(
+    public CompletableFuture<Void> addFriend(
             @RequestParam String receiverUniqueName
     ) {
-        friendRequestService.sendFriendRequest(receiverUniqueName, userService.getUser().getId());
-        return ResponseEntity.ok().build();
+        return friendRequestService.sendFriendRequest(receiverUniqueName,  userService.getUser().getId());
     }
 
     @GetMapping("/acceptRequest")
