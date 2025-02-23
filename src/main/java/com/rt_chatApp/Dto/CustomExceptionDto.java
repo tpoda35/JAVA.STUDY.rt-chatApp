@@ -15,5 +15,4 @@ public class CustomExceptionDto{
     private Date date;
     private Integer statusCode;
     private String message;
-    private String path;
 }
