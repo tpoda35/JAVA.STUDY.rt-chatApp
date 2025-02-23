@@ -25,28 +25,27 @@ import java.util.concurrent.CompletionException;
 public class ExceptionController {
     @ExceptionHandler(CompletionException.class)
     public ResponseEntity<?> handleCompletionException(
-            CompletionException e, HttpServletRequest request
+            CompletionException e
     ) {
         Throwable cause = e.getCause();
 
         if (cause instanceof UserNotFoundException) {
-            return handleUserNotFoundException((UserNotFoundException) cause, request);
+            return handleUserNotFoundException((UserNotFoundException) cause);
         } else if (cause instanceof IllegalStateException) {
-            return handleIllegalStateException((IllegalStateException) cause, request);
+            return handleIllegalStateException((IllegalStateException) cause);
         }
 
-        return globalExceptionHandler(e, request);
+        return globalExceptionHandler(e);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<CustomExceptionDto> handleUserNotFoundException(
-            UserNotFoundException e, HttpServletRequest request
+            UserNotFoundException e
     ) {
         var response = CustomExceptionDto.builder()
                 .date(new Date())
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .message(e.getMessage())
-                .path(request.getRequestURI())
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
@@ -54,13 +53,12 @@ public class ExceptionController {
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<CustomExceptionDto> handleIllegalStateException(
-            IllegalStateException e, HttpServletRequest request
+            IllegalStateException e
     ) {
         var response = CustomExceptionDto.builder()
                 .date(new Date())
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .message(e.getMessage())
-                .path(request.getRequestURI())
                 .build();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -68,13 +66,12 @@ public class ExceptionController {
 
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<CustomExceptionDto> handleAuthorizationDeniedException(
-            AuthorizationDeniedException e, HttpServletRequest request
+            AuthorizationDeniedException e
     ) {
         var response = CustomExceptionDto.builder()
                 .date(new Date())
                 .statusCode(HttpStatus.FORBIDDEN.value())
                 .message(e.getMessage())
-                .path(request.getRequestURI())
                 .build();
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
@@ -82,13 +79,12 @@ public class ExceptionController {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<CustomExceptionDto> handleEntityNotFoundException(
-            EntityNotFoundException e, HttpServletRequest request
+            EntityNotFoundException e
     ) {
         var response = CustomExceptionDto.builder()
                 .date(new Date())
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .message(e.getMessage())
-                .path(request.getRequestURI())
                 .build();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -109,13 +105,12 @@ public class ExceptionController {
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<CustomExceptionDto> handleJwtExpirationException(
-            ExpiredJwtException e, HttpServletRequest request
+            ExpiredJwtException e
     ){
         var response = CustomExceptionDto.builder()
                 .date(new Date())
                 .statusCode(HttpStatus.UNAUTHORIZED.value())
                 .message("Session expired.")
-                .path(request.getRequestURI())
                 .build();
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
@@ -123,13 +118,12 @@ public class ExceptionController {
 
     @ExceptionHandler(MalformedJwtException.class)
     public ResponseEntity<CustomExceptionDto> handleMalformedJwtException(
-            MalformedJwtException e, HttpServletRequest request
+            MalformedJwtException e
     ){
         var response = CustomExceptionDto.builder()
                 .date(new Date())
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .message("Invalid JWT token.")
-                .path(request.getRequestURI())
                 .build();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -147,13 +141,12 @@ public class ExceptionController {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CustomExceptionDto> globalExceptionHandler(
-            Exception e, HttpServletRequest request
+            Exception e
     ){
         var response = CustomExceptionDto.builder()
                 .date(new Date())
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message(e.getMessage())
-                .path(request.getRequestURI())
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
