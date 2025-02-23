@@ -31,7 +31,8 @@ public class FriendRequestService {
     private final TransactionTemplate transactionTemplate;
     private static final Logger logger = LoggerFactory.getLogger(FriendRequestService.class);
 
-    public void sendFriendRequest(String uniqueName, int senderId) {
+    @Async
+    public CompletableFuture<Void> sendFriendRequest(String uniqueName, int senderId) {
         transactionTemplate.execute(status -> {
             SecurityContext thread = SecurityContextHolder.getContext();
             logger.info("Thread context: {}", thread.getAuthentication());
@@ -59,6 +60,8 @@ public class FriendRequestService {
             );
             return null;
         });
+
+        return CompletableFuture.completedFuture(null);
     }
 
     @Async
