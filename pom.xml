@@ -120,18 +120,6 @@
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 			<version>3.3.0</version>
 		</dependency>
-
-		<!-- Webflux -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.projectreactor</groupId>
-			<artifactId>reactor-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-
 	</dependencies>
 
 	<build>
