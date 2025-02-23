@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -73,6 +74,44 @@ public class FriendRequestService {
             throw new EntityNotFoundException("There's no received requests.");
         }
         return CompletableFuture.completedFuture(FriendRequestMapper.INSTANCE.toDtoList(friendRequests));
+    }
+
+    @Async
+    public CompletableFuture<Void> acceptRequest(
+            Integer id
+    ) {
+        transactionTemplate.execute(status -> {
+            FriendRequest request = requestRepository.findByIdWithUsers(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Friend request not found."));
+
+            User sender = request.getSender();
+            User receiver = request.getReceiver();
+
+            sender.addFriend(receiver);
+            receiver.addFriend(sender);
+
+            userRepository.saveAll(Arrays.asList(sender, receiver));
+
+            requestRepository.delete(request);
+
+            return null;
+        });
+        return CompletableFuture.completedFuture(null);
+    }
+
+    @Async
+    public CompletableFuture<Void> rejectRequest(
+            Integer id
+    ) {
+        transactionTemplate.execute(status -> {
+            FriendRequest request = requestRepository.findByIdWithUsers(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Friend request not found."));
+
+            requestRepository.delete(request);
+
+           return null;
+        });
+        return CompletableFuture.completedFuture(null);
     }
 
     private boolean hasPendingRequest(User sender, User receiver){
