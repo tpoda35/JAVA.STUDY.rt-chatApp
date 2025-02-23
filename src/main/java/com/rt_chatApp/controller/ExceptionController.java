@@ -83,11 +83,11 @@ public class ExceptionController {
     ) {
         var response = CustomExceptionDto.builder()
                 .date(new Date())
-                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .statusCode(HttpStatus.NOT_FOUND.value())
                 .message(e.getMessage())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
