@@ -65,6 +65,10 @@ public class User implements UserDetails {
   @ToString.Exclude
   private List<User> friends;
 
+  public void addFriend(User user) {
+    friends.add(user);
+  }
+
   @OneToMany(mappedBy = "sender")
   @ToString.Exclude
   private List<FriendRequest> sentRequests;
