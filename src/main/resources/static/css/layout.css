@@ -3,3 +3,7 @@
     flex-direction: row;
     height: 100vh;
 }
+
+#friendsModal .form-control {
+    line-height: 2.2;
+}
