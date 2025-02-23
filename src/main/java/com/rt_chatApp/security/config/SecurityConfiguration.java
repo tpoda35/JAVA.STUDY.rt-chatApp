@@ -60,6 +60,9 @@ public class SecurityConfiguration {
                 .exceptionHandling(exception -> { exception
                     .authenticationEntryPoint(authenticationEntryPoint);
                 })
+                .securityContext(context -> { context
+                        .requireExplicitSave(false);
+                })
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .oauth2Login(oAuth2 ->
