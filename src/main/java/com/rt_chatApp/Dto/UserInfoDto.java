@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data transfer object to transfer specific user data.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

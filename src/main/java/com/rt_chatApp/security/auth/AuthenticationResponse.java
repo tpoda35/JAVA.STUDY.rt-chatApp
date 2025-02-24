@@ -11,9 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponse {
-
-  // This mainly used as DTO for data sending.
-  // Will be reworked.
   @JsonProperty("access_token")
   private String accessToken;
   @JsonProperty("refresh_token")

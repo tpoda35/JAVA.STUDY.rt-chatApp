@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data transfer object for a chat message.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

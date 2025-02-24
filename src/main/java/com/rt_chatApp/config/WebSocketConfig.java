@@ -15,6 +15,13 @@ import java.util.List;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON;
 
+/**
+ * Configuration for Websocket connections.
+ *
+ * <p>It enables the STOMP Websocket messages through the whole application.
+ * Configures the Websocket endpoint, message brokers for broadcasting and private messaging.
+ * Also configures a JSON serializer.</p>
+ */
 @Configuration
 @EnableWebSocketMessageBroker
 @RequiredArgsConstructor
@@ -22,6 +29,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final CustomHandshakeHandler handshakeHandler;
 
+    /**
+     * Enables the connections endpoint where clients can connect with SockJS.
+     * Also enables the {@link CustomHandshakeHandler}.
+     *
+     * @param registry for to register websockets.
+     */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
@@ -29,15 +42,33 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .withSockJS();
     }
 
+    /**
+     * Configures the routing of the messages.
+     *
+     * <p>Configuration details:
+     * <ul>
+     *   <li><b>/topic</b>: For broadcasting messages to all connected clients.</li>
+     *   <li><b>/user</b>: For sending private messages to users.</li>
+     *   <li><b>/app</b>: Prefix for client-to-server messages mapped to {@code @MessageMapping} methods.</li>
+     *   <li><b>/user</b>: For private communication.</li>
+     * </ul>
+     * </p>
+     *
+     * @param registry for configuring routes.
+     */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        // /user -> for sending private messages.
-        // /topic -> for broadcasting messages to all users.
         registry.enableSimpleBroker("/topic", "/user");
-        registry.setApplicationDestinationPrefixes("/app"); //for client-to-server communication (mapped to @MessageMapping).
+        registry.setApplicationDestinationPrefixes("/app");
         registry.setUserDestinationPrefix("/user");
     }
 
+    /**
+     * Configure a custom JSON serializer.
+     *
+     * @param messageConverters a list of messageConverters to register.
+     * @return false, which means that default converters shouldn't be overridden.
+     */
     @Override
     public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
         DefaultContentTypeResolver resolver = new DefaultContentTypeResolver();

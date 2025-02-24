@@ -10,12 +10,21 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.security.Principal;
 
+/**
+ * Class to track when the user disconnects from the websocket server.
+ */
 @Component
 @RequiredArgsConstructor
 public class DisconnectEventListener implements ApplicationListener<SessionDisconnectEvent> {
 
     private final UserStatusService statusService;
 
+    /**
+     * Triggers when a user disconnects from the websocket server.
+     *
+     * <p>Gets the user from the event, sets it's status to offline
+     * and then sends message about it for the user friends.</p>
+     */
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {
         Principal principal = event.getUser();

@@ -9,6 +9,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data transfer object for the friend system.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+/**
+ * Data transfer object for the friend requests.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

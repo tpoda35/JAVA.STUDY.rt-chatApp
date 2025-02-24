@@ -15,8 +15,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-// This is the defaults which we need to use JWT dependency.
-
+/**
+ * Configuration class for the JWT system.
+ */
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {

@@ -6,6 +6,12 @@ import lombok.*;
 
 import java.util.Date;
 
+/**
+ * Class and database table for the Friend requests.
+ *
+ * <p>Has unique constraint to prevent race condition when two user sends
+ * request to each other at the same time.</p>
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

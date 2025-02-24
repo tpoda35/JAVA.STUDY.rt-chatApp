@@ -19,12 +19,22 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
+/**
+ * Custom JWT filter class.
+ *
+ * <p>Gets called at every request, because it extends {@link OncePerRequestFilter}.
+ * Ensures that the JWT is always in the header, and it's not expired.</p>
+ */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtService jwtService;
   private final UserDetailsService userDetailsService;
   private final TokenRepository tokenRepository;
+
+  /**
+   * This resolver sends the exceptions to the global handler {@link com.rt_chatApp.controller.ExceptionController}.
+   */
   private final HandlerExceptionResolver resolver;
 
     public JwtAuthenticationFilter(
@@ -39,15 +49,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.resolver = resolver;
     }
 
+  /**
+   * Method, which checks the JWT.
+   *
+   * <p>If the path contains /api/v1/auth, then we don't need to filter,
+   * because we have the authentication endpoints there.
+   * The filter gets the cookies from the header, saves the JWT in a variable if it's found.
+   * Extract the email, and then checks it and the auth context if it is null.
+   * Checks if the token is valid. Sets the auth context and switches to the next filter.</p>
+   *
+   * @param request incoming http request.
+   * @param response of the incoming http request.
+   * @param filterChain the Spring Security filter chain.
+   */
     @Override
-  protected void doFilterInternal(
+    protected void doFilterInternal(
       @NonNull HttpServletRequest request,
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain
   ) throws ServletException, IOException {
     try {
-      // If the path is /api/v1/auth, then we don't need to check the JWT.
-      // That is because we don't need to authorize or authenticate that url
       if (request.getServletPath().contains("/api/v1/auth")) {
         filterChain.doFilter(request, response);
         return;
@@ -73,9 +94,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return;
       }
 
-      // Extract the username (which is the email) from the JWT.
       userEmail = jwtService.extractUsername(jwt);
-      // Checks if the email or the authentication is not null.
       if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
         var isTokenValid = tokenRepository.findByToken(jwt)

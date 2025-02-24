@@ -9,9 +9,20 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * Custom entry point for the application.
+ */
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+    /**
+     * Method, which redirects the user or gives back a status code if
+     * it's unauthenticated.
+     *
+     * @param request sent in request.
+     * @param response the response what this method gives back.
+     * @param authException the exception which the user got.
+     */
     @Override
     public void commence(
             HttpServletRequest request,

@@ -19,6 +19,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletionException;
 
+/**
+ * Global exception handler, catches every uncaught and unhandled exception.
+ *
+ * <p>Annotated with @RestControllerAdvice, which enables this class as a global exception handler.
+ * Every @ExceptionHandler handles a different exception.</p>
+ */
 @RestControllerAdvice
 public class ExceptionController {
     @ExceptionHandler(CompletionException.class)

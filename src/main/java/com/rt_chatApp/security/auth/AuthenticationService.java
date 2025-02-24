@@ -1,11 +1,11 @@
 package com.rt_chatApp.security.auth;
 
+import com.rt_chatApp.Exceptions.UserNotFoundException;
 import com.rt_chatApp.security.config.JwtService;
 import com.rt_chatApp.security.token.Token;
 import com.rt_chatApp.security.token.TokenRepository;
 import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +22,9 @@ import static com.rt_chatApp.security.user.AuthProvider.LOCAL;
 import static com.rt_chatApp.security.user.Role.USER;
 import static com.rt_chatApp.security.user.Status.OFFLINE;
 
+/**
+ * Service class for the authentication system.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -32,11 +35,14 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
-  // Registers the user.
-  // Process:
-  // User gives the data with the RegisterRequest object, with that data a new user object is created with the lombok builder.
-  // The user object saved in the DB, also generates JWT and refreshToken with the user object.
-  // Only the JWT token getting saved to the DB, which later will be authenticated with every request.
+  /**
+   * Method, which registers a new user.
+   *
+   * <p>Checks if the email is in use, if it's not then sets up
+   * and saves a new user object.</p>
+   *
+   * @param request sent in used data.
+   */
   @Transactional
   public void register(RegisterRequest request) {
     if (repository.existsByEmail(request.getEmail())){
@@ -55,13 +61,15 @@ public class AuthenticationService {
     var savedUser = repository.save(user);
   }
 
-  // Authenticates/Logins a user.
-  // Process:
-  // User gives in the data with the AuthenticationRequest object, which is passed to the authenticationManager.
-  // That authenticates the user.
-  // With the user object the code creates a new JWT and refreshToken.
-  // Only the JWT token getting saved to the DB, which later will be authenticated with every request.
-  // Gives back response in the form of AuthenticationResponse.
+  /**
+   * Method, which authenticates a user.
+   *
+   * <p>Creates a new auth object, generates JWT and Refresh tokens,
+   * saves it and sends it back.</p>
+   *
+   * @param request sent in user data.
+   * @return {@link AuthenticationResponse} for the cookies.
+   */
   @Transactional
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(
@@ -71,7 +79,7 @@ public class AuthenticationService {
         )
     );
     var user = repository.findByEmail(request.getEmail())
-            .orElseThrow(() -> new EntityNotFoundException("User not found."));
+            .orElseThrow(() -> new UserNotFoundException("User not found."));
     var jwtToken = jwtService.generateToken(user);
     // Will be modified to stay the same for 30 days.
     var refreshToken = jwtService.generateRefreshToken(user);
@@ -83,10 +91,6 @@ public class AuthenticationService {
             .build();
   }
 
-  // Saves the JWT token to the DB.
-  // Process:
-  // The method need a user object and a JWT token.
-  // A new Token object is created with that data and saved to the database.
   @Transactional
   protected void saveUserToken(User user, String jwtToken) {
     var token = Token.builder()
@@ -99,10 +103,6 @@ public class AuthenticationService {
     tokenRepository.save(token);
   }
 
-  // Revokes all the valid tokens related to the given user.
-  // Process:
-  // The method need a user object.
-  // The code gets all the valid user token, where the Expiration && Revoked is not true and modifies them to true.
   @Transactional
   protected void revokeAllUserTokens(User user) {
     var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
@@ -115,9 +115,16 @@ public class AuthenticationService {
     tokenRepository.saveAll(validUserTokens);
   }
 
-  // Better exception handling will be added.
-  // Gives back a new httponly cookie with a new jwt token, if the refresh token is valid.
-  // Else logs out the user.
+  /**
+   * Method, which refreshes the JWT token. (Will be modified)
+   *
+   * <p>Extracts the email from the refresh token,
+   * gets the user from the database with the email,
+   * with the user generates a new JWT token.</p>
+   *
+   * @param refreshToken from the header.
+   * @return access token string.
+   */
   @Transactional
   public String refreshToken(
           String refreshToken

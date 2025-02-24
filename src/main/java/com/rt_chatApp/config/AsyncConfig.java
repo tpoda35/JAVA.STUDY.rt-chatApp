@@ -12,6 +12,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.concurrent.Executor;
 
+/**
+ * Custom asynchronous threads configuration.
+ *
+ * <p>This configuration enables asynchronous processing, transaction management,
+ * and integrates security context propagation into async tasks.</p>
+ */
+
 @Configuration
 @EnableAsync
 @EnableTransactionManagement
@@ -19,6 +26,12 @@ import java.util.concurrent.Executor;
 public class AsyncConfig implements AsyncConfigurer {
 
     private final ExceptionController exceptionController;
+
+    /**
+     * Configures the async executor with a fixed thread pool and security context delegation.
+     *
+     * @return an Executor that supports asynchronous operations with security context propagation.
+     */
 
     @Override
     public Executor getAsyncExecutor() {
@@ -30,6 +43,12 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.initialize();
         return new DelegatingSecurityContextAsyncTaskExecutor(executor);
     }
+
+    /**
+     * Redirects the uncaught exceptions to the global handler.
+     *
+     * @return AsyncExceptionHandler with the global exception handler.
+     */
 
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {

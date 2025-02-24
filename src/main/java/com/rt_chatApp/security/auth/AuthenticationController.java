@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 
+/**
+ * Controller class for the user authentication system.
+ */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -17,26 +20,30 @@ public class AuthenticationController {
 
   private final AuthenticationService service;
 
-  // Registers a user.
-  // Will be modified in the future (mostly the Refresh Token system).
-  // Process:
-  // server.register(request) registers the user.
-  // If everything is good, then it gives back a jwt + refresh token.
-  // These two gets saved in HttpOnly Cookies.
+  /**
+   * Endpoint for registering.
+   *
+   * @param request sent in user data.
+   * @return a string with 200 status code. (will be changed)
+   */
   @PostMapping("/register")
   public ResponseEntity<String> register(
-      @RequestBody @Valid RegisterRequest request,
-      HttpServletResponse response
+      @RequestBody @Valid RegisterRequest request
   ) {
     service.register(request);
     return ResponseEntity.ok("Registered and authenticated.");
   }
 
-  // Authenticates the user.
-  // Process:
-  // The service.authenticate(request) authenticates the user.
-  // If it was successful, then we have a JWT and a RefreshToken in the authResponse variable.
-  // We add them to two different HttpOnly Cookies and save them to the response.
+  /**
+   * Endpoint for logging in.
+   *
+   * <p>Authenticates the user, and if everything goes fine,
+   * sets up 2 httponly cookie with the JWT and Refresh token and send it back.</p>
+   *
+   * @param request sent in user data.
+   * @param response which will be sent back.
+   * @return string with 200 status code. (will be changed)
+   */
   @PostMapping("/authenticate")
   public ResponseEntity<String> authenticate(
       @RequestBody @Valid AuthenticationRequest request,
@@ -59,11 +66,13 @@ public class AuthenticationController {
     return ResponseEntity.ok("Authenticated.");
   }
 
-  // Refreshes the access token.
-  // Process:
-  // The service.refreshToken(refreshToken) gives back a new JWT token.
-  // If the accessToken is null gives back an AuthenticationException which is handled with the global exception handler.
-  // If the accessToken is not null, then it creates a new HttpOnly Cookie and save it to the response.
+  /**
+   * Endpoint for the refresh token system (not works right now, will be fixed).
+   *
+   * @param refreshToken the saved refresh token from the header.
+   * @param response which will be sent back.
+   * @return string with 200 status code. (will be changed)
+   */
   @PostMapping("/refresh-token")
   public ResponseEntity<String> refreshToken(
         @CookieValue("RefreshToken") String refreshToken,

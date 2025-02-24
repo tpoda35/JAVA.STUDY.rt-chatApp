@@ -14,10 +14,17 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
+/**
+ * Service class for logout.
+ */
 @Service
 public class LogoutService implements LogoutHandler {
 
   private final TokenRepository tokenRepository;
+
+  /**
+   * This resolver sends the exceptions to the global handler {@link com.rt_chatApp.controller.ExceptionController}.
+   */
   private final HandlerExceptionResolver resolver;
 
     public LogoutService(
@@ -28,6 +35,17 @@ public class LogoutService implements LogoutHandler {
         this.resolver = resolver;
     }
 
+  /**
+   * Method, which logs out the user. (will be reformated)
+   *
+   * <p>Gets the cookies from the header, saves the JWT.
+   * Sets the JWT expiration and validation to false.
+   * Removes the cookies and clears the auth context.</p>
+   *
+   * @param request incoming http request.
+   * @param response of the incoming http request.
+   * @param authentication user authentication object.
+   */
   @Override
   @Transactional
   public void logout(
