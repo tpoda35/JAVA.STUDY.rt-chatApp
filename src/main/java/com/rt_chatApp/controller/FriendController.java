@@ -2,7 +2,6 @@ package com.rt_chatApp.controller;
 
 import com.rt_chatApp.Dto.FriendDto;
 import com.rt_chatApp.Dto.FriendRequestDto;
-import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserService;
 import com.rt_chatApp.services.FriendService;
 import lombok.RequiredArgsConstructor;
@@ -31,23 +30,17 @@ public class FriendController {
     }
 
     @PostMapping("/acceptRequest/{requestId}")
-    public CompletableFuture<ResponseEntity<Void>> acceptRequest(
+    public CompletableFuture<Void> acceptRequest(
             @PathVariable("requestId") Integer requestId
     ) {
-        friendService.acceptRequest(requestId);
-        return CompletableFuture.completedFuture(
-                ResponseEntity.ok().build()
-        );
+        return friendService.acceptRequest(requestId);
     }
 
     @PostMapping("/rejectRequest/{requestId}")
-    public CompletableFuture<ResponseEntity<Void>> rejectRequest(
+    public CompletableFuture<Void> rejectRequest(
             @PathVariable("requestId") Integer requestId
     ){
-        friendService.rejectRequest(requestId);
-        return CompletableFuture.completedFuture(
-                ResponseEntity.ok().build()
-        );
+        return friendService.rejectRequest(requestId);
     }
 
     @GetMapping("/getReceivedRequests")
