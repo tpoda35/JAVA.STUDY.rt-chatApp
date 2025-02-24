@@ -42,31 +42,4 @@ public class UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (User) authentication.getPrincipal();
     }
-
-    public void disconnect(Integer id){
-        var storedUser = userRepository.findById(id)
-                .orElse(null);
-        if (storedUser != null){
-            storedUser.setStatus(OFFLINE);
-            userRepository.save(storedUser);
-        }
-    }
-
-    public void connect(Integer id) {
-        var storedUser = userRepository.findById(id)
-                .orElse(null);
-        if (storedUser != null){
-            storedUser.setStatus(ONLINE);
-            userRepository.save(storedUser);
-        }
-    }
-
-    public void idle(Integer id) {
-        var storedUser = userRepository.findById(id)
-                .orElse(null);
-        if (storedUser != null){
-            storedUser.setStatus(IDLE);
-            userRepository.save(storedUser);
-        }
-    }
 }
