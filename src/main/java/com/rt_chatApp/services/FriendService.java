@@ -13,6 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -20,6 +21,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import static com.rt_chatApp.Enum.FriendDtoType.FRIEND_ADD;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class FriendService {
     private final FriendRequestRepository requestRepository;
     private final UserService userService;
     private final TransactionTemplate transactionTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
     private static final Logger logger = LoggerFactory.getLogger(FriendService.class);
 
     @Async
@@ -87,6 +91,28 @@ public class FriendService {
             receiver.addFriend(sender);
 
             userRepository.saveAll(Arrays.asList(sender, receiver));
+
+            messagingTemplate.convertAndSendToUser(
+                    String.valueOf(sender.getId()),
+                    "/queue/friends",
+                    FriendDto.builder()
+                            .type(FRIEND_ADD)
+                            .userId(receiver.getId())
+                            .displayName(receiver.getDisplayName())
+                            .status(receiver.getStatus())
+                            .build()
+            );
+
+            messagingTemplate.convertAndSendToUser(
+                    String.valueOf(receiver.getId()),
+                    "/queue/friends",
+                    FriendDto.builder()
+                            .type(FRIEND_ADD)
+                            .userId(sender.getId())
+                            .displayName(sender.getDisplayName())
+                            .status(sender.getStatus())
+                            .build()
+            );
 
             requestRepository.delete(request);
 
