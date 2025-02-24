@@ -14,6 +14,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import static com.rt_chatApp.Enum.FriendDtoType.FRIEND_UPDATE;
 import static com.rt_chatApp.security.user.Status.OFFLINE;
 import static com.rt_chatApp.security.user.Status.ONLINE;
 
@@ -64,9 +65,10 @@ public class UserStatusService {
                         String.valueOf(friend.getId()),
                         "/queue/friends",
                         FriendDto.builder()
-                                .userId(friend.getId())
-                                .displayName(friend.getDisplayName())
-                                .status(friend.getStatus())
+                                .type(FRIEND_UPDATE)
+                                .userId(user.getId())
+                                .displayName(user.getDisplayName())
+                                .status(user.getStatus())
                                 .build());
             }
 
