@@ -1,5 +1,6 @@
 package com.rt_chatApp.services;
 
+import com.rt_chatApp.Dto.FriendDto;
 import com.rt_chatApp.Dto.FriendRequestDto;
 import com.rt_chatApp.Exceptions.UserNotFoundException;
 import com.rt_chatApp.Mapper.FriendRequestMapper;
@@ -13,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -24,20 +23,17 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
-public class FriendRequestService {
+public class FriendService {
 
     private final UserRepository userRepository;
     private final FriendRequestRepository requestRepository;
     private final UserService userService;
     private final TransactionTemplate transactionTemplate;
-    private static final Logger logger = LoggerFactory.getLogger(FriendRequestService.class);
+    private static final Logger logger = LoggerFactory.getLogger(FriendService.class);
 
     @Async
     public CompletableFuture<Void> sendFriendRequest(String uniqueName, int senderId) {
         transactionTemplate.execute(status -> {
-            SecurityContext thread = SecurityContextHolder.getContext();
-            logger.info("Thread context: {}", thread.getAuthentication());
-
             User receiver = userRepository.findByUniqueIdentifier(uniqueName)
                     .orElseThrow(() -> new UserNotFoundException("Receiver not found."));
 
@@ -112,6 +108,25 @@ public class FriendRequestService {
            return null;
         });
         return CompletableFuture.completedFuture(null);
+    }
+
+    @Async
+    public CompletableFuture<List<FriendDto>> getAllFriend(){
+        List<FriendDto> friends = transactionTemplate.execute(status -> {
+            User user = userService.getUser();
+            if (user == null){
+                throw new UserNotFoundException("User not found when getting friends.");
+            }
+            List<FriendDto> friendsList = userRepository.findFriendsByUserId(user.getId());
+
+            if (friendsList == null || friendsList.isEmpty()){
+                throw new UserNotFoundException("User has no friends.");
+            }
+
+            return friendsList;
+        });
+
+        return CompletableFuture.completedFuture(friends);
     }
 
     private boolean hasPendingRequest(User sender, User receiver){
