@@ -4,6 +4,7 @@ const fullChatArea = document.querySelector('.chat-area');
 const chatArea = document.querySelector('#chat-message');
 const messageForm = document.querySelector('#messageForm');
 const messageInput = document.querySelector('#message');
+const connectedUsersList = document.getElementById('connectedUsers');
 
 let stompClient = null;
 let dName = null;
@@ -51,33 +52,64 @@ function connect(event) {
 function onConnected() {
     stompClient.subscribe(`/user/${userId}/queue/messages`, onMessageReceived);
     stompClient.subscribe(`/user/public`, onMessageReceived);
-    stompClient.subscribe(`/topic/onlineUsers`, onlineUsers);
-}
+    stompClient.subscribe(`/user/${userId}/queue/friends`, function (messageOutput) {
+        let message = JSON.parse(messageOutput.body);
 
-function onlineUsers(message) {
-    let users = JSON.parse(message.body);
-    updateUserList(users);
-}
+        if (message.type === 'FRIEND_UPDATE'){
+            modifyFriendList(message);
 
-function updateUserList(users){
-    const connectedUsersList = document.getElementById('connectedUsers');
-    connectedUsersList.innerHTML = '';
-
-    Object.entries(users).forEach(([key, value]) => {
-        if (Number(key) !== userId) {
-            appendUserElement(key, value, connectedUsersList);
+        } else if (message.type === 'FRIEND_ADD') {
+            appendUserElement(message);
+        } else {
+            throw new Error("Invalid type on queue/friends.");
         }
     });
+
+    loadFriendListOnConnect();
 }
 
-function appendUserElement(key, value, connectedUsersList) {
+function modifyFriendList(message) {
+    const listItem = document.getElementById(message.userId);
+    const statusDot = listItem.querySelector('span');
+    statusDot.classList.remove('ONLINE', 'OFFLINE');
+    statusDot.classList.add(message.status);
+}
+
+function loadFriendListOnConnect() {
+    fetch('http://localhost:8080/api/v1/friends/getAllFriend', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    const errorMessage = errorData.message;
+                    throw new Error(errorMessage);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            connectedUsersList.innerHTML = '';
+            data.forEach(request => {
+                appendUserElement(request)
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function appendUserElement(request) {
     const listItem = document.createElement('li');
     listItem.classList.add('user-item');
-    listItem.id = key;
+    listItem.id = request.userId;
 
     const statusDot = document.createElement('span');
     statusDot.classList.add('status-indicator');
-    statusDot.classList.add('ONLINE');
+    statusDot.classList.add(request.status);
     listItem.appendChild(statusDot);
 
     const iconImg = document.createElement('img');
@@ -88,7 +120,7 @@ function appendUserElement(key, value, connectedUsersList) {
 
     const usernameSpan = document.createElement('span');
     usernameSpan.classList.add('user-text');
-    usernameSpan.textContent = value;
+    usernameSpan.textContent = request.displayName;
 
     listItem.appendChild(usernameSpan);
     listItem.addEventListener('click', userItemClick);
