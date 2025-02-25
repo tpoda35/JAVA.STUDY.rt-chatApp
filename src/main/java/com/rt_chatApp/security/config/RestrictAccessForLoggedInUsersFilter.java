@@ -11,9 +11,19 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Class for restricting users from specific routes/pages.
+ */
 @Component
 public class RestrictAccessForLoggedInUsersFilter extends OncePerRequestFilter {
 
+    /**
+     * Method, which restricts authenticated user to access the login and register page.
+     *
+     * @param request incoming http request.
+     * @param response for the http request.
+     * @param filterChain Spring Security filter chain.
+     */
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
@@ -29,7 +39,7 @@ public class RestrictAccessForLoggedInUsersFilter extends OncePerRequestFilter {
                 !"anonymousUser".equals(authentication.getPrincipal()) &&
                 ("/login.html".equals(uri) || "/register.html".equals(uri))
         ) {
-            response.sendRedirect("/");
+            response.sendRedirect("/home");
             return;
         }
 

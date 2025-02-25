@@ -14,12 +14,24 @@ import static com.rt_chatApp.security.user.AuthProvider.GOOGLE;
 import static com.rt_chatApp.security.user.Role.USER;
 import static com.rt_chatApp.security.user.Status.OFFLINE;
 
+/**
+ * Service class for handling register/login with OAuth2.
+ */
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository repository;
 
+    /**
+     * Method, which handles the OAuth2 external logins.
+     *
+     * <p>Gets the data from the external service. Checks if there's a user with that data.
+     * If there's no user with the data, creates a new user and saves it to the database.</p>
+     *
+     * @param userRequest is the request what the user sent in with the external login service.
+     * @return {@link DefaultOAuth2User} with the user data.
+     */
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);

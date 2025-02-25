@@ -7,12 +7,25 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Service class for the private chatroom system.
+ */
 @Service
 @RequiredArgsConstructor
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
 
+    /**
+     * Method, which either gives back a chatroomId if it's exists,
+     * or creates a new, if the boolean is set to true, otherwise it
+     * will return an Optional.empty()
+     *
+     * @param senderId the id of the sender.
+     * @param recipientId the id of the recipient.
+     * @param createNewRoomIfNotExists determines if a new chatroom shall be created.
+     * @return Optional of String.
+     */
     public Optional<String> getChatRoomId(
             Integer senderId,
             Integer recipientId,

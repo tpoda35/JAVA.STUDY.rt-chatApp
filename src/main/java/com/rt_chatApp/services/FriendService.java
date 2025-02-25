@@ -24,6 +24,9 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.rt_chatApp.Enum.FriendDtoType.FRIEND_ADD;
 
+/**
+ * Service class of the friend system.
+ */
 @Service
 @RequiredArgsConstructor
 public class FriendService {
@@ -35,6 +38,17 @@ public class FriendService {
     private final SimpMessagingTemplate messagingTemplate;
     private static final Logger logger = LoggerFactory.getLogger(FriendService.class);
 
+    /**
+     * Async method, which sends a friend request to another user.
+     *
+     * <p>Opens a transaction for rollbacks in a case where an exception is thrown,
+     * to prevent data loss. Searches for the user with the indexed uniqueName.
+     * Checks if the user sent that request to itself and if it already sent a request
+     * for the receiver. If everything is okay, the request is saved in the database.</p>
+     *
+     * @param uniqueName the unique name of the receiver.
+     * @param senderId is the id of the sender.
+     */
     @Async
     public CompletableFuture<Void> sendFriendRequest(String uniqueName, int senderId) {
         transactionTemplate.execute(status -> {
@@ -64,6 +78,7 @@ public class FriendService {
 
         return CompletableFuture.completedFuture(null);
     }
+
 
     @Async
     public CompletableFuture<List<FriendRequestDto>> getReceivedRequests(

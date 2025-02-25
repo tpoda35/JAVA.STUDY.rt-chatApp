@@ -17,12 +17,20 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+/**
+ * Configuration class for the Spring Security.
+ *
+ * <p>Enables Web Security and also method level security.</p>
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
+    /**
+     * List of the endpoints which doesn't require authentication.
+     */
     private static final String[] WHITE_LIST_URL = {
             "/api/v1/auth/**",
             "/v2/api-docs",
@@ -49,6 +57,24 @@ public class SecurityConfiguration {
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
+    /**
+     * Configures the application's security filter chain.
+     *
+     * <p>This configuration defines the core Spring Security behavior, including:</p>
+     * <ul>
+     *     <li>Disabling CSRF protection.</li>
+     *     <li>Permitting requests to specified endpoints and securing all other endpoints.</li>
+     *     <li>Handling authentication exceptions with a custom entry point.</li>
+     *     <li>Setting session management to stateless to ensure JWT-based authentication.</li>
+     *     <li>Integrating OAuth2 login with custom user service and success handler.</li>
+     *     <li>Adding a JWT authentication filter before the username-password filter.</li>
+     *     <li>Configuring logout behavior with a custom logout handler.</li>
+     * </ul>
+     *
+     * @param http the {@link HttpSecurity} instance to configure.
+     * @return the configured {@link SecurityFilterChain}.
+     * @throws Exception if an error occurs while building the security configuration.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

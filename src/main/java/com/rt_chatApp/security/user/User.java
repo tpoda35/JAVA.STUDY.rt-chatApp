@@ -12,6 +12,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * User class for the whole authentication system.
+ *
+ * <p>It has the {@link UserDetails} implemented, which is required for the JWT system.
+ * The uniqueIdentifier property has an index for the friend system, for faster database queries.</p>
+ */
 @Data
 @Builder
 @NoArgsConstructor

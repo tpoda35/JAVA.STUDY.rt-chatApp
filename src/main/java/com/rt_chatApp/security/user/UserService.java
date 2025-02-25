@@ -38,6 +38,11 @@ public class UserService {
         userRepository.save(user);
     }
 
+    /**
+     * Method, which gives back the authenticated user with the {@link SecurityContextHolder}.
+     *
+     * @return a {@link User}.
+     */
     public User getUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (User) authentication.getPrincipal();

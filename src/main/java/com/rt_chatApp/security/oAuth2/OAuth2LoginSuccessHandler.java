@@ -20,6 +20,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * Class which handles the success of the OAuth2 external login.
+ */
 @Component
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -29,6 +32,17 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final ObjectMapper objectMapper;
     private final TokenRepository tokenRepository;
 
+    /**
+     * Method, which handles the success of the external login.
+     *
+     * <p>If the login was successful, then it generates new JWT and Refresh token,
+     * and send it back with the response. Also saves the JWT to the database
+     * and redirects the user to the home page of the site.</p>
+     *
+     * @param request
+     * @param response
+     * @param authentication
+     */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
