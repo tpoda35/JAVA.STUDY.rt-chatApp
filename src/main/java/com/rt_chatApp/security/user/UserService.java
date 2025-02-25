@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 
-import static com.rt_chatApp.security.user.Status.*;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
