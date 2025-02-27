@@ -1,38 +1,217 @@
+/* Main container of the navbar */
 .navbar {
-    width: 5%;
-    background-color: #191b1f;
+    min-width: max-content;
+    width: 15%;
+    background-color: var(--c-background-primary);
     align-items: center;
     justify-content: space-between;
 }
 
-.navbar a, button {
+.navbar-top {
+    width: 100%;
     color: white;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.navbar a:hover, button:hover {
-    background: rgb(130,41,67);
-    background: linear-gradient(180deg, rgba(130,41,67,1) 0%, rgba(142,66,196,1) 50%, rgba(82,53,70,1) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    transition: all 0.3s ease-in-out;
-}
-
-.navbar-btn-active {
-    background: rgb(130,41,67);
-    background: linear-gradient(180deg, rgba(130,41,67,1) 0%, rgba(142,66,196,1) 50%, rgba(82,53,70,1) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
 }
 
 .navbar-middle {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    gap: 3rem;
+    gap: 5px;
+    width: 100%;
 }
+
+.navbar-bottom {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.navbar-top-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 20px 0 30px;
+}
+
+.navbar-top-content p {
+    margin: 0;
+}
+
+.navbar-top-content-user img {
+    margin-right: 10px;
+}
+
+.navbar-top-content-btn {
+    text-decoration: none;
+    color: var(--c-text-primary);
+}
+
+.navbar-top-content-btn > div {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 30%;
+    background-color: gray;
+}
+
+.navbar-top-content-btn:hover {
+    cursor: pointer;
+}
+
+.navbar-user-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.navbar button{
+    background: none;
+    border: none;
+}
+
+.navbar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-decoration: none;
+    width: 100%;
+    height: 65px;
+    transition: ease-in-out .2s;
+    user-select: none;
+}
+
+.navbar-btn p {
+    margin: 0;
+    color: var(--c-text-secondary);
+    transition: ease-in-out .2s;
+}
+
+.navbar-middle a:nth-child(1):hover {
+    background-color: var(--c-background-secondary);
+    cursor: pointer;
+    box-shadow: inset 10px 0 0 rebeccapurple;
+}
+
+.navbar-middle a:nth-child(1):hover p {
+    color: var(--c-text-primary);
+}
+
+.navbar-middle-active-1 {
+    background-color: var(--c-background-secondary);
+    cursor: pointer;
+    box-shadow: inset 10px 0 0 rebeccapurple;
+    color: var(--c-text-primary);
+}
+
+.navbar-middle a:nth-child(3):hover {
+    background-color: var(--c-background-secondary);
+    cursor: pointer;
+    box-shadow: inset 10px 0 0 var(--c-success);
+}
+
+.navbar-middle a:nth-child(3):hover p {
+    color: var(--c-text-primary);
+}
+
+.navbar-middle-active-2 {
+    background-color: var(--c-background-secondary);
+    cursor: pointer;
+    box-shadow: inset 10px 0 0 var(--c-success);
+    color: var(--c-text-primary);
+}
+
+.navbar-middle button:nth-child(5):hover {
+    background-color: var(--c-background-secondary);
+    cursor: pointer;
+    box-shadow: inset 10px 0 0 cornflowerblue;
+}
+
+.navbar-middle button:nth-child(5):hover p {
+    color: var(--c-text-primary);
+}
+
+.navbar-middle-active-3 {
+    background-color: var(--c-background-secondary);
+    cursor: pointer;
+    box-shadow: inset 10px 0 0 cornflowerblue;
+    color: var(--c-text-primary);
+}
+
+.navbar-bottom button:nth-child(1):hover {
+    background-color: var(--c-background-secondary);
+    cursor: pointer;
+    box-shadow: inset 10px 0 0 orange;
+}
+
+.navbar-bottom a:nth-child(2):hover {
+    background-color: var(--c-background-secondary);
+    cursor: pointer;
+    box-shadow: inset 10px 0 0 indianred;
+}
+
+.navbar-bottom a:hover p {
+    color: var(--c-text-primary);
+}
+
+.navbar-bottom-active-1 {
+    background-color: var(--c-background-secondary);
+    cursor: pointer;
+    box-shadow: inset 10px 0 0 indianred;
+    color: var(--c-text-primary);
+}
+
+.navbar-btn-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    text-decoration: none;
+    width: 100%;
+    margin: 0 30px 0 30px;
+    height: 30px;
+}
+
+.navbar-btn-divider {
+    background-color: var(--c-divider);
+    height: 1px;
+    width: 70%;
+}
+
+/* Custom colors of the icons */
+.navbar-icon-custom-color {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 30%;
+}
+
+.navbar-icon-custom-color i {
+    color: white;
+}
+
+.navbar-icon-purple {
+    background-color: rebeccapurple;
+}
+
+.navbar-icon-orange {
+    background-color: orange;
+}
+
+.navbar-icon-blue {
+    background-color: cornflowerblue;
+}
+
+.navbar-icon-red {
+    background-color: indianred;
+}
+
+.navbar-icon-green {
+    background-color: var(--c-success);
+}
+
+/* Custom colors end */

@@ -1,6 +1,7 @@
 'use strict';
 
-const fullChatArea = document.querySelector('.chat-area');
+const fullChatArea = document.querySelector('.index-second-column');
+const indexFirstColumn = document.querySelector('.index-first-column');
 const chatArea = document.querySelector('#chat-message');
 const messageForm = document.querySelector('#messageForm');
 const messageInput = document.querySelector('#message');
@@ -104,25 +105,34 @@ function loadFriendListOnConnect() {
 
 function appendUserElement(request) {
     const listItem = document.createElement('li');
+    const divItem1 = document.createElement('div');
+    const divItem2 = document.createElement('div');
+    const statusDot = document.createElement('span');
+    const iconImg = document.createElement('img');
+    const usernameSpan = document.createElement('span');
+    const lastMessage = document.createElement('span');
+
     listItem.classList.add('user-item');
     listItem.id = request.userId;
+    listItem.appendChild(divItem1);
 
-    const statusDot = document.createElement('span');
-    statusDot.classList.add('status-indicator');
-    statusDot.classList.add(request.status);
-    listItem.appendChild(statusDot);
-
-    const iconImg = document.createElement('img');
     iconImg.src = '../image/user_icon.png';
     iconImg.alt = 'User Icon';
     iconImg.classList.add('user-icon');
-    listItem.appendChild(iconImg);
+    divItem1.appendChild(iconImg);
 
-    const usernameSpan = document.createElement('span');
-    usernameSpan.classList.add('user-text');
+    statusDot.classList.add('status-indicator');
+    statusDot.classList.add(request.status);
+    divItem1.appendChild(statusDot);
+    divItem1.appendChild(divItem2);
+
     usernameSpan.textContent = request.displayName;
+    lastMessage.textContent = 'Hey there!';
 
-    listItem.appendChild(usernameSpan);
+    divItem2.classList.add('user-item-text');
+    divItem2.appendChild(usernameSpan);
+    divItem2.appendChild(lastMessage);
+
     listItem.addEventListener('click', userItemClick);
 
     connectedUsersList.appendChild(listItem);
@@ -137,20 +147,40 @@ function userItemClick(event) {
     clickedUser.classList.add('active');
 
     selectedUserId = clickedUser.getAttribute('id');
+    indexFirstColumn.classList.remove('w-100');
+    fullChatArea.classList.remove('d-none');
+
     fetchAndDisplayUserChat().then();
 }
 
 function displayMessage(senderId, content) {
     const messageContainer = document.createElement('div');
-    messageContainer.classList.add('message');
-    if (senderId === userId) {
-        messageContainer.classList.add('sender');
-    } else {
-        messageContainer.classList.add('receiver');
-    }
     const message = document.createElement('p');
-    message.textContent = content;
-    messageContainer.appendChild(message);
+    const iconImg = document.createElement('img');
+    if (senderId === userId) {
+        messageContainer.classList.add('d-flex', 'm-3', 'justify-content-start');
+        messageContainer.appendChild(iconImg);
+        messageContainer.appendChild(message);
+
+        iconImg.src = '../image/user_icon.png';
+        iconImg.alt = 'User Icon';
+        iconImg.classList.add('chat-icon');
+
+        message.classList.add('sender');
+        message.textContent = content;
+    } else {
+        messageContainer.classList.add('d-flex', 'm-3', 'justify-content-end');
+        messageContainer.appendChild(message);
+        messageContainer.appendChild(iconImg);
+
+        iconImg.src = '../image/user_icon.png';
+        iconImg.alt = 'User Icon';
+        iconImg.classList.add('chat-icon');
+
+        message.classList.add('receiver');
+        message.textContent = content;
+    }
+
     chatArea.appendChild(messageContainer);
 }
 

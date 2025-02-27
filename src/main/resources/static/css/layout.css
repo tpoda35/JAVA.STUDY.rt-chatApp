@@ -1,3 +1,30 @@
+:root {
+    --c-background-primary: #1b1f29;
+    --c-background-secondary: #2c313d;
+    --c-panel-background: #343a46;
+    --c-divider: #424856;
+
+    --c-text-primary: #f1f1f1;
+    --c-text-secondary: #adb5bd;
+
+    --c-primary-accent: #3b82f6;
+    --c-success: #10b981;
+    --c-warning: #fbbf24;
+    --c-danger: #ef4444;
+    --c-purple: #8b5cf6;
+    --c-lightblue: #7289da;
+
+    /*Checkboxes, buttons*/
+    --c-checked-state: #3b82f6;
+    --c-unchecked-border: #6b7280;
+    --c-btn-hover: #2563eb;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
 .main-container {
     display: flex;
     flex-direction: row;
