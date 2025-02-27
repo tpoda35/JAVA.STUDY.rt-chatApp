@@ -84,8 +84,6 @@ public class LogoutService implements LogoutHandler {
             cookie.setPath("/");
             response.addCookie(cookie);
           }
-
-          SecurityContextHolder.clearContext();
         } else {
           throw new LogoutException("Logout failed.");
         }
