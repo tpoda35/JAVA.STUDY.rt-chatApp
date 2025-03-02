@@ -1,0 +1,11 @@
+.profile-modal-container {
+    background-color: var(--c-background-primary);
+    color: var(--c-text-primary);
+}
+
+
+
+.profile-content-section button {
+    background-color: var(--c-lightblue);
+    border: none;
+}
