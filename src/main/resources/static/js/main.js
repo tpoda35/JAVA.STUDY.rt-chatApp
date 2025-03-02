@@ -5,7 +5,8 @@ const indexFirstColumn = document.querySelector('.index-first-column');
 const chatArea = document.querySelector('#chat-message');
 const messageForm = document.querySelector('#messageForm');
 const messageInput = document.querySelector('#message');
-const connectedUsersList = document.getElementById('connectedUsers');
+const connectedUsersList = document.querySelector('#connectedUsers');
+const headerText = document.querySelector('.index-header-text');
 
 let stompClient = null;
 let dName = null;
@@ -147,6 +148,12 @@ function userItemClick(event) {
     clickedUser.classList.add('active');
 
     selectedUserId = clickedUser.getAttribute('id');
+    const usernameHeader = clickedUser.querySelector('.user-item .user-item-text span');
+    console.log(usernameHeader.textContent);
+    if (usernameHeader) {
+        headerText.textContent = usernameHeader.textContent;
+    }
+
     indexFirstColumn.classList.remove('w-100');
     fullChatArea.classList.remove('d-none');
 
@@ -196,8 +203,7 @@ async function fetchAndDisplayUserChat() {
 }
 
 function onError() {
-    connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
-    connectingElement.style.color = 'red';
+    throw new Error("Failed to connect to the server.");
 }
 
 function sendMessage(event) {
