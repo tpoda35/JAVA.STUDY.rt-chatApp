@@ -1,6 +1,7 @@
 package com.rt_chatApp.controller;
 
 import com.rt_chatApp.Dto.CustomExceptionDto;
+import com.rt_chatApp.Exceptions.DisplayNameCooldownException;
 import com.rt_chatApp.Exceptions.UserNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -27,6 +28,19 @@ import java.util.concurrent.CompletionException;
  */
 @RestControllerAdvice
 public class ExceptionController {
+    @ExceptionHandler(DisplayNameCooldownException.class)
+    public ResponseEntity<CustomExceptionDto> handleDisplayNameCooldownException(
+            DisplayNameCooldownException e
+    ) {
+        var response = CustomExceptionDto.builder()
+                .date(new Date())
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .message(e.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
     @ExceptionHandler(CompletionException.class)
     public ResponseEntity<?> handleCompletionException(
             CompletionException e
