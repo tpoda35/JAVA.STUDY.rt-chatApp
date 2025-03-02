@@ -13,6 +13,8 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
         <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <title>Chat Application</title>
     </head>
     <body>
@@ -57,8 +59,8 @@
             </div>
 
             <div class="mb-4 navbar-bottom">
-                <button class="navbar-btn">
-                    <div class="navbar-btn-content" type="button" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                <button class="navbar-btn" type="button" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                    <div class="navbar-btn-content">
                         <div class="navbar-icon-custom-color navbar-icon-orange">
                             <i class="fa-solid fa-gear"></i>
                         </div>
@@ -150,17 +152,15 @@
                             <div id="profile-section" class="settings-content-section">
                                 <h5>Profile Information</h5>
                                 <p>Edit your profile details here.</p>
-                                <form>
+                                <form id="saveDNameForm">
                                     <div class="mb-3">
-                                        <form>
-                                            <div class="mb-2">
-                                                <label for="displayName" class="form-label">
-                                                    Change username (<span style="font-style: italic">every two weeks</span>)
-                                                </label>
-                                                <input type="text" class="form-control" id="displayName" name="displayName">
-                                            </div>
-                                            <button type="submit" class="modal-btn">Save</button>
-                                        </form>
+                                        <div class="mb-2">
+                                            <label for="displayName" class="form-label">
+                                                Change username (<span style="font-style: italic">every two weeks</span>)
+                                            </label>
+                                            <input type="text" class="form-control" id="displayName" name="displayName">
+                                        </div>
+                                        <button type="submit" class="modal-btn">Save</button>
                                     </div>
                                 </form>
                             </div>
@@ -219,10 +219,9 @@
     <script th:src="@{/js/friendSystem.js}" src="../static/js/friendSystem.js"></script>
     <script th:src="@{/js/main.js}" src="../static/js/main.js"></script>
     <script th:src="@{/js/settings.js}" src="../static/js/settings.js"></script>
+    <script th:src="@{/js/notifications.js}" src="../static/js/notifications.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     </body>
 </html>
