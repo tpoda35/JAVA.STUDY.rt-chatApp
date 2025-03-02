@@ -55,8 +55,10 @@ document.querySelector('#friendsModal form').addEventListener('submit', function
 });
 
 function appendRequest(request) {
+    const faIconAccept = document.createElement('i');
+    const faIconReject = document.createElement('i');
     const listItem = document.createElement('li');
-    listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'bg-dark', 'text-white', 'border-0');
+    listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'bg-secondary', 'text-white', 'border-0');
     listItem.id = request.id;
 
     const usernameSpan = document.createElement('span');
@@ -65,14 +67,16 @@ function appendRequest(request) {
     const buttonContainer = document.createElement('div');
 
     const acceptButton = document.createElement('button');
-    acceptButton.classList.add('btn', 'btn-success', 'btn-sm', 'me-2');
-    acceptButton.textContent = 'Accept';
+    acceptButton.classList.add('friend-request-default-btn', 'friend-request-accept-btn');
     acceptButton.addEventListener('click', () => handleAccept(request.id));
+    acceptButton.appendChild(faIconAccept);
+    faIconAccept.classList.add('fa-solid', 'fa-check');
 
     const rejectButton = document.createElement('button');
-    rejectButton.classList.add('btn', 'btn-danger', 'btn-sm');
-    rejectButton.textContent = 'Reject';
+    rejectButton.classList.add('friend-request-default-btn', 'friend-request-reject-btn');
     rejectButton.addEventListener('click', () => handleReject(request.id));
+    rejectButton.appendChild(faIconReject);
+    faIconReject.classList.add('fa-solid', 'fa-xmark');
 
     buttonContainer.appendChild(acceptButton);
     buttonContainer.appendChild(rejectButton);
