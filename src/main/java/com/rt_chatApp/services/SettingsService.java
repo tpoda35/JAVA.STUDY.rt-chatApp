@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -24,12 +25,21 @@ public class SettingsService {
 
         if (lastModifiedDNameDate == null || lastModifiedDNameDate.plusWeeks(2).isBefore(LocalDateTime.now())) {
             user.setDisplayName(displayName);
+            user.setLastModifiedDNameDate(LocalDateTime.now());
             userRepository.save(user);
         } else {
             LocalDateTime nextAllowedChangeTime = lastModifiedDNameDate.plusWeeks(2);
-            String formattedTime = nextAllowedChangeTime.toLocalDate().toString() + " " + nextAllowedChangeTime.toLocalTime().toString();
+
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+            String formattedTime =
+                    nextAllowedChangeTime.toLocalDate().format(dateFormatter)
+                            + " " +
+                            nextAllowedChangeTime.toLocalTime().format(timeFormatter);
+
+
             throw new DisplayNameCooldownException("You cannot change your display name until " + formattedTime);
         }
     }
-
 }
