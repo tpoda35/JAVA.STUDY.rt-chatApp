@@ -32,20 +32,9 @@ public class HomeController {
             Authentication authentication
     ) {
         if (isAuthenticated(authentication)) {
+            model.addAttribute("dName", service.getAuthenticatedUserName());
             model.addAttribute("currentPage", "groups");
             return "groups";
-        }
-        return "redirect:/login";
-    }
-
-    @GetMapping("/settings")
-    public String redirectToSettings(
-            Model model,
-            Authentication authentication
-    ) {
-        if (isAuthenticated(authentication)) {
-            model.addAttribute("currentPage", "settings");
-            return "settings";
         }
         return "redirect:/login";
     }
