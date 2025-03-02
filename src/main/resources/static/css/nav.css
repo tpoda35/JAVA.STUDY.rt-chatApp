@@ -60,12 +60,16 @@
     cursor: pointer;
 }
 
-.navbar-user-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
+.navbar-top-content .user-icon {
+    margin-right: 10px;
 }
+
+/*.navbar-user-icon {*/
+/*    width: 60px;*/
+/*    height: 60px;*/
+/*    border-radius: 50%;*/
+/*    object-fit: cover;*/
+/*}*/
 
 .navbar button{
     background: none;
