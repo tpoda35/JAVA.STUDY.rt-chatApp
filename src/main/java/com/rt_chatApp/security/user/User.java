@@ -9,6 +9,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,6 +38,9 @@ public class User implements UserDetails {
 
   @Column(nullable = false)
   private String displayName;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  private LocalDateTime lastModifiedDNameDate;
 
   @Column(nullable = false, unique = true)
   private String uniqueIdentifier;
@@ -83,9 +87,13 @@ public class User implements UserDetails {
   @ToString.Exclude
   private List<FriendRequest> receivedRequests;
 
+  @Column(nullable = false)
+  private String iconColor;
+
   @PrePersist
-  protected void createIdentifier(){
+  protected void onCreate(){
     uniqueIdentifier = displayName + "#" + id;
+    iconColor = "#ffffff";
   }
 
   @Override
