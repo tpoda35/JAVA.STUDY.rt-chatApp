@@ -22,3 +22,29 @@ document.addEventListener("DOMContentLoaded", function () {
         buttons[0].click();
     }
 });
+
+document.getElementById('saveDNameForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const newDisplayName = document.querySelector('#displayName').value;
+
+    fetch('http://localhost:8080/api/v1/settings/changeDisplayName?newDisplayName=' + encodeURIComponent(newDisplayName), {
+        method: 'POST'
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    const errorMessage = errorData.message;
+                    toastr.error(errorMessage, 'Error');
+                    throw new Error(errorMessage);
+                });
+            }
+            return response;
+        })
+        .then(() => {
+            sessionStorage.setItem('displayNameChanged', 'true');
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
