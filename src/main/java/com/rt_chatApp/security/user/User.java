@@ -2,6 +2,7 @@ package com.rt_chatApp.security.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rt_chatApp.model.FriendRequest;
+import com.rt_chatApp.model.Notification;
 import com.rt_chatApp.security.token.Token;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -65,6 +66,7 @@ public class User implements UserDetails {
   @ToString.Exclude
   private List<Token> tokens;
 
+  // Friend System
   @ManyToMany
   @JoinTable(
           name = "user_friends",
@@ -87,16 +89,13 @@ public class User implements UserDetails {
   @ToString.Exclude
   private List<FriendRequest> receivedRequests;
 
-  @Column(nullable = false)
-  private String iconColor;
-
-  @Temporal(TemporalType.TIMESTAMP)
-  private LocalDateTime lastModifiedIColorDate;
+  // Notification
+  @OneToMany(mappedBy = "recipient")
+  private Collection<Notification> notification;
 
   @PrePersist
   protected void onCreate(){
     uniqueIdentifier = displayName + "#" + id;
-    iconColor = "#ffffff";
   }
 
   @Override
