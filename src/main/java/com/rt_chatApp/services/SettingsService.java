@@ -1,7 +1,6 @@
 package com.rt_chatApp.services;
 
-import com.rt_chatApp.Exceptions.DisplayNameCooldownException;
-import com.rt_chatApp.Exceptions.IconColorCooldownException;
+import com.rt_chatApp.exception.DisplayNameCooldownException;
 import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserRepository;
 import com.rt_chatApp.security.user.UserService;
@@ -30,20 +29,6 @@ public class SettingsService {
             userRepository.save(user);
         } else {
             throw new DisplayNameCooldownException("You cannot change your display name until " + formatDate(lastModifiedDNameDate.plusWeeks(2)));
-        }
-    }
-
-    @Transactional
-    public void changeIconColor(String iconColor){
-        User user = userService.getUser();
-        LocalDateTime lastModifiedIColorDate = user.getLastModifiedDNameDate();
-
-        if (lastModifiedIColorDate == null || lastModifiedIColorDate.plusWeeks(2).isBefore(LocalDateTime.now())) {
-            user.setIconColor(iconColor);
-            user.setLastModifiedIColorDate(LocalDateTime.now());
-            userRepository.save(user);
-        } else {
-            throw new IconColorCooldownException("You cannot change your icon color until " + formatDate(lastModifiedIColorDate.plusWeeks(2)));
         }
     }
 

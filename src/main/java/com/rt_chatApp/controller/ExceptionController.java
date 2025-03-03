@@ -1,9 +1,8 @@
 package com.rt_chatApp.controller;
 
-import com.rt_chatApp.Dto.CustomExceptionDto;
-import com.rt_chatApp.Exceptions.DisplayNameCooldownException;
-import com.rt_chatApp.Exceptions.IconColorCooldownException;
-import com.rt_chatApp.Exceptions.UserNotFoundException;
+import com.rt_chatApp.dto.CustomExceptionDto;
+import com.rt_chatApp.exception.DisplayNameCooldownException;
+import com.rt_chatApp.exception.UserNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.persistence.EntityNotFoundException;
@@ -47,19 +46,6 @@ public class ExceptionController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customExceptionDto);
-    }
-
-    @ExceptionHandler(IconColorCooldownException.class)
-    public ResponseEntity<CustomExceptionDto> handleIconColorCooldownException(
-            IconColorCooldownException e
-    ) {
-        var response = CustomExceptionDto.builder()
-                .date(new Date())
-                .statusCode(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(DisplayNameCooldownException.class)

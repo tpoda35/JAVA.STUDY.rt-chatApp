@@ -1,6 +1,6 @@
 package com.rt_chatApp.security.config;
 
-import com.rt_chatApp.Exceptions.LogoutException;
+import com.rt_chatApp.exception.LogoutException;
 import com.rt_chatApp.security.token.TokenRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;

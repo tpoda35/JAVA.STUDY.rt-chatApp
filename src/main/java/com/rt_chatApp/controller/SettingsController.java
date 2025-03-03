@@ -30,14 +30,4 @@ public class SettingsController {
     ) {
         settingsService.changeDisplayName(newDisplayName);
     }
-
-    @PostMapping("/changeIconColor")
-    @Validated
-    public void changeIconColor(
-            @RequestParam
-            @NotNull(message = "The color cannot be null.")
-            String newIconColor
-    ) {
-        settingsService.changeIconColor(newIconColor);
-    }
 }

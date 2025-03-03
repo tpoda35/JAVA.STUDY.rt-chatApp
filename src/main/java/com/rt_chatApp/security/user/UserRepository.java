@@ -1,6 +1,6 @@
 package com.rt_chatApp.security.user;
 
-import com.rt_chatApp.Dto.FriendDto;
+import com.rt_chatApp.dto.FriendDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
    * @param userId the id of the user whose friends we want to find.
    * @return list of {@link FriendDto}.
    */
-  @Query("SELECT new com.rt_chatApp.Dto.FriendDto(f.id, f.displayName, f.status) " +
+  @Query("SELECT new com.rt_chatApp.dto.FriendDto(f.id, f.displayName, f.status) " +
           "FROM User u JOIN u.friends f WHERE u.id = :userId")
   List<FriendDto> findFriendsByUserId(@Param("userId") Integer userId);
 }

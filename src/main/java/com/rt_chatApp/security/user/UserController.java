@@ -1,6 +1,6 @@
 package com.rt_chatApp.security.user;
 
-import com.rt_chatApp.Dto.UserInfoDto;
+import com.rt_chatApp.dto.UserInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

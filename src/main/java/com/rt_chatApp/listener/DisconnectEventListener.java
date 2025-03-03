@@ -1,4 +1,4 @@
-package com.rt_chatApp.Listeners;
+package com.rt_chatApp.listener;
 
 import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.services.UserStatusService;

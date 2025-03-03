@@ -1,6 +1,6 @@
-package com.rt_chatApp.Thymeleaf.Controller;
+package com.rt_chatApp.thymeleaf.controller;
 
-import com.rt_chatApp.Thymeleaf.Service.HomeService;
+import com.rt_chatApp.thymeleaf.service.HomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

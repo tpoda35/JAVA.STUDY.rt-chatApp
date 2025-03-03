@@ -1,6 +1,6 @@
 package com.rt_chatApp.security.auth;
 
-import com.rt_chatApp.Exceptions.UserNotFoundException;
+import com.rt_chatApp.exception.UserNotFoundException;
 import com.rt_chatApp.security.config.JwtService;
 import com.rt_chatApp.security.token.Token;
 import com.rt_chatApp.security.token.TokenRepository;

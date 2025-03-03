@@ -1,4 +1,4 @@
-package com.rt_chatApp.Thymeleaf.Service;
+package com.rt_chatApp.thymeleaf.service;
 
 import com.rt_chatApp.security.user.User;
 import org.springframework.security.core.Authentication;

@@ -1,6 +1,6 @@
 package com.rt_chatApp.repository;
 
-import com.rt_chatApp.ChatRoom.ChatRoom;
+import com.rt_chatApp.model.ChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

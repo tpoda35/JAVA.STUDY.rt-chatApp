@@ -1,10 +1,10 @@
 package com.rt_chatApp.services;
 
-import com.rt_chatApp.Dto.FriendDto;
-import com.rt_chatApp.Dto.FriendRequestDto;
-import com.rt_chatApp.Exceptions.UserNotFoundException;
-import com.rt_chatApp.Mapper.FriendRequestMapper;
-import com.rt_chatApp.Model.FriendRequest;
+import com.rt_chatApp.dto.FriendDto;
+import com.rt_chatApp.dto.FriendRequestDto;
+import com.rt_chatApp.exception.UserNotFoundException;
+import com.rt_chatApp.mapper.FriendRequestMapper;
+import com.rt_chatApp.model.FriendRequest;
 import com.rt_chatApp.repository.FriendRequestRepository;
 import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserRepository;

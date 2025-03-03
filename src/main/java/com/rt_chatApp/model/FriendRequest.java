@@ -1,4 +1,4 @@
-package com.rt_chatApp.Model;
+package com.rt_chatApp.model;
 
 import com.rt_chatApp.security.user.User;
 import jakarta.persistence.*;

@@ -1,7 +1,7 @@
-package com.rt_chatApp.Mapper;
+package com.rt_chatApp.mapper;
 
-import com.rt_chatApp.Dto.FriendRequestDto;
-import com.rt_chatApp.Model.FriendRequest;
+import com.rt_chatApp.dto.FriendRequestDto;
+import com.rt_chatApp.model.FriendRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

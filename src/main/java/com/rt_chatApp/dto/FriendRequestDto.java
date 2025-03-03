@@ -1,4 +1,4 @@
-package com.rt_chatApp.Dto;
+package com.rt_chatApp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

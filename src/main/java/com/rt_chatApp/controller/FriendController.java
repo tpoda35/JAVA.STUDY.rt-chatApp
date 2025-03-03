@@ -1,7 +1,7 @@
 package com.rt_chatApp.controller;
 
-import com.rt_chatApp.Dto.FriendDto;
-import com.rt_chatApp.Dto.FriendRequestDto;
+import com.rt_chatApp.dto.FriendDto;
+import com.rt_chatApp.dto.FriendRequestDto;
 import com.rt_chatApp.security.user.UserService;
 import com.rt_chatApp.services.FriendService;
 import lombok.RequiredArgsConstructor;

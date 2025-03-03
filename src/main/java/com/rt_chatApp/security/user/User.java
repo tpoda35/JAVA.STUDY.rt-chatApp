@@ -1,7 +1,7 @@
 package com.rt_chatApp.security.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.rt_chatApp.Model.FriendRequest;
+import com.rt_chatApp.model.FriendRequest;
 import com.rt_chatApp.security.token.Token;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

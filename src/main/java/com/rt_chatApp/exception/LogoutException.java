@@ -1,4 +1,4 @@
-package com.rt_chatApp.Exceptions;
+package com.rt_chatApp.exception;
 
 public class LogoutException extends RuntimeException{
     public LogoutException(String message) {

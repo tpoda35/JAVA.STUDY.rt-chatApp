@@ -1,6 +1,6 @@
 package com.rt_chatApp.repository;
 
-import com.rt_chatApp.Model.FriendRequest;
+import com.rt_chatApp.model.FriendRequest;
 import com.rt_chatApp.security.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

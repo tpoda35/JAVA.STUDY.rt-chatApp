@@ -1,4 +1,4 @@
-package com.rt_chatApp.Dto;
+package com.rt_chatApp.dto;
 
 import com.rt_chatApp.Enum.FriendDtoType;
 import com.rt_chatApp.security.user.Status;

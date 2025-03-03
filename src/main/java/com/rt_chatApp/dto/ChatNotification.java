@@ -1,27 +1,22 @@
-package com.rt_chatApp.Model;
+package com.rt_chatApp.dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
+/**
+ * Data transfer object for a chat message.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "_chatMessage")
-public class ChatMessage {
+public class ChatNotification {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String chatId;
     private Integer senderId;
     private Integer recipientId;
     private String content;
-    private Date timeStamp;
+
 }

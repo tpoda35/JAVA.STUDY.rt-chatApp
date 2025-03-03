@@ -1,7 +1,7 @@
 package com.rt_chatApp.services;
 
-import com.rt_chatApp.Dto.FriendDto;
-import com.rt_chatApp.Exceptions.UserNotFoundException;
+import com.rt_chatApp.dto.FriendDto;
+import com.rt_chatApp.exception.UserNotFoundException;
 import com.rt_chatApp.security.user.User;
 import com.rt_chatApp.security.user.UserRepository;
 import com.rt_chatApp.security.user.UserService;
