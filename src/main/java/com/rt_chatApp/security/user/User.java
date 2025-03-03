@@ -90,6 +90,9 @@ public class User implements UserDetails {
   @Column(nullable = false)
   private String iconColor;
 
+  @Temporal(TemporalType.TIMESTAMP)
+  private LocalDateTime lastModifiedIColorDate;
+
   @PrePersist
   protected void onCreate(){
     uniqueIdentifier = displayName + "#" + id;
