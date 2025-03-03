@@ -2,10 +2,12 @@ package com.rt_chatApp.controller;
 
 import com.rt_chatApp.Dto.CustomExceptionDto;
 import com.rt_chatApp.Exceptions.DisplayNameCooldownException;
+import com.rt_chatApp.Exceptions.IconColorCooldownException;
 import com.rt_chatApp.Exceptions.UserNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,6 +16,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +31,37 @@ import java.util.concurrent.CompletionException;
  */
 @RestControllerAdvice
 public class ExceptionController {
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<CustomExceptionDto> handleMethodValidationException(
+            HandlerMethodValidationException e
+    ) {
+        String errorMessage = e.getAllErrors().stream()
+                .findFirst()
+                .map(MessageSourceResolvable::getDefaultMessage)
+                .orElse("Validation failed");
+
+        CustomExceptionDto customExceptionDto = CustomExceptionDto.builder()
+                .date(new Date())
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .message(errorMessage)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customExceptionDto);
+    }
+
+    @ExceptionHandler(IconColorCooldownException.class)
+    public ResponseEntity<CustomExceptionDto> handleIconColorCooldownException(
+            IconColorCooldownException e
+    ) {
+        var response = CustomExceptionDto.builder()
+                .date(new Date())
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .message(e.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
     @ExceptionHandler(DisplayNameCooldownException.class)
     public ResponseEntity<CustomExceptionDto> handleDisplayNameCooldownException(
             DisplayNameCooldownException e
