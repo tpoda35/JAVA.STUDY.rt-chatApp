@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * Data transfer object for the friend system.
  */
@@ -27,6 +29,8 @@ public class FriendDto {
     @Enumerated(EnumType.STRING)
     private FriendDtoType type;
     private Integer userId;
+    private LocalDateTime lastMessageDate;
+    private String lastMessage; // last 15 char
     private String displayName;
     private Status status;
 }
