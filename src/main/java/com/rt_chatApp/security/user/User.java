@@ -91,6 +91,7 @@ public class User implements UserDetails {
 
   // Notification
   @OneToMany(mappedBy = "recipient")
+  @ToString.Exclude
   private Collection<Notification> notification;
 
   @PrePersist
