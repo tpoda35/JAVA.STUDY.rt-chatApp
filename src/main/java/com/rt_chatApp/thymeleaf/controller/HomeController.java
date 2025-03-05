@@ -39,6 +39,19 @@ public class HomeController {
         return "redirect:/login";
     }
 
+    @GetMapping("/inbox")
+    public String redirectToInbox(
+            Model model,
+            Authentication authentication
+    ) {
+        if (isAuthenticated(authentication)) {
+            model.addAttribute("dName", service.getAuthenticatedUserName());
+            model.addAttribute("currentPage", "inbox");
+            return "inbox";
+        }
+        return "redirect:/login";
+    }
+
     private Boolean isAuthenticated(Authentication authentication) {
         return authentication != null && authentication.isAuthenticated();
     }
