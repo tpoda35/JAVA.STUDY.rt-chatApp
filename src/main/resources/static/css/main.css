@@ -35,6 +35,11 @@
     min-width: max-content;
 }
 
+.user-item > p {
+    color: white;
+    font-size: small;
+}
+
 .user-item > div {
     display: flex;
     align-items: center;

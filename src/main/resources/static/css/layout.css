@@ -2,7 +2,7 @@
     --c-background-primary: #1b1f29;
     --c-background-secondary: #2c313d;
     --c-panel-background: #343a46;
-    --c-divider: #424856;
+    --c-divider: #595f6d;
 
     --c-text-primary: #f1f1f1;
     --c-text-secondary: #adb5bd;
@@ -14,10 +14,31 @@
     --c-purple: #8b5cf6;
     --c-lightblue: #7289da;
 
-    /*Checkboxes, buttons*/
     --c-checked-state: #3b82f6;
     --c-unchecked-border: #6b7280;
     --c-btn-hover: #2563eb;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #ddd;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #ddd;
 }
 
 * {

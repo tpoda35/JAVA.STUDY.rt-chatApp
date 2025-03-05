@@ -10,6 +10,36 @@
 .navbar-top {
     width: 100%;
     color: white;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar-top p {
+    margin: 0 0 0 10px;
+}
+
+.navbar-top > div {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-top i {
+    margin-right: 10px;
+}
+
+.navbar-top a {
+    color: white;
+    transition: all .3s;
+}
+
+.navbar-top a:hover {
+    color: cadetblue;
+}
+
+.navbar-top-btn-active {
+    color: cadetblue;
 }
 
 .navbar-middle {
@@ -23,45 +53,6 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-}
-
-.navbar-top-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 20px 0 30px;
-}
-
-.navbar-top-content p {
-    margin: 0;
-}
-
-.navbar-top-content-user img {
-    margin-right: 10px;
-}
-
-.navbar-top-content-btn {
-    text-decoration: none;
-    color: var(--c-text-primary);
-}
-
-.navbar-top-content-btn > div {
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 25px;
-    height: 25px;
-    border-radius: 30%;
-    background-color: gray;
-}
-
-.navbar-top-content-btn:hover {
-    cursor: pointer;
-}
-
-.navbar-top-content .user-icon {
-    margin-right: 10px;
 }
 
 /*.navbar-user-icon {*/
